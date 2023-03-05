@@ -207,14 +207,14 @@ pub fn check(contents: &str, options: JsValue) -> Result<JsValue, JsValue> {
 
     let messages: Vec<ExpandedMessage> = diagnostics
         .into_iter()
-        .map(|diagnostic| ExpandedMessage {
-            code: diagnostic.kind.rule().clone().into(),
-            message: diagnostic.kind.body(),
-            location: diagnostic.location,
-            end_location: diagnostic.end_location,
-            fix: diagnostic.fix.map(|fix| ExpandedFix {
+        .map(|message| ExpandedMessage {
+            code: Into::<&Rule>::into(&message.kind).into(),
+            message: message.kind.body.clone(),
+            location: message.location,
+            end_location: message.end_location,
+            fix: message.fix.map(|fix| ExpandedFix {
                 content: fix.content,
-                message: diagnostic.kind.commit(),
+                message: message.kind.commit.clone(),
                 location: fix.location,
                 end_location: fix.end_location,
             }),

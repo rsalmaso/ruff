@@ -241,7 +241,7 @@ pub fn rewrite_mock_attribute(checker: &mut Checker, expr: &Expr) {
                 },
                 Range::from_located(value),
             );
-            if checker.patch(diagnostic.kind.rule()) {
+            if checker.patch((&diagnostic.kind).into()) {
                 diagnostic.amend(Fix::replacement(
                     "mock".to_string(),
                     value.location,
@@ -316,7 +316,7 @@ pub fn rewrite_mock_import(checker: &mut Checker, stmt: &Stmt) {
                     },
                     Range::from_located(stmt),
                 );
-                if checker.patch(diagnostic.kind.rule()) {
+                if checker.patch((&diagnostic.kind).into()) {
                     if let Some(indent) = indentation(checker.locator, stmt) {
                         match format_import_from(stmt, indent, checker.locator, checker.stylist) {
                             Ok(content) => {

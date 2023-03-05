@@ -60,7 +60,7 @@ pub fn not_tests(
                         if check_not_in {
                             let mut diagnostic =
                                 Diagnostic::new(NotInTest, Range::from_located(operand));
-                            if checker.patch(diagnostic.kind.rule()) && should_fix {
+                            if checker.patch((&diagnostic.kind).into()) && should_fix {
                                 diagnostic.amend(Fix::replacement(
                                     compare(left, &[Cmpop::NotIn], comparators, checker.stylist),
                                     expr.location,
@@ -74,7 +74,7 @@ pub fn not_tests(
                         if check_not_is {
                             let mut diagnostic =
                                 Diagnostic::new(NotIsTest, Range::from_located(operand));
-                            if checker.patch(diagnostic.kind.rule()) && should_fix {
+                            if checker.patch((&diagnostic.kind).into()) && should_fix {
                                 diagnostic.amend(Fix::replacement(
                                     compare(left, &[Cmpop::IsNot], comparators, checker.stylist),
                                     expr.location,

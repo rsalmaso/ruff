@@ -246,7 +246,7 @@ fn pytest_fixture_parentheses(
         },
         Range::from_located(decorator),
     );
-    if checker.patch(diagnostic.kind.rule()) {
+    if checker.patch((&diagnostic.kind).into()) {
         diagnostic.amend(fix);
     }
     checker.diagnostics.push(diagnostic);
@@ -309,7 +309,7 @@ fn check_fixture_decorator(checker: &mut Checker, func_name: &str, decorator: &E
                             ExtraneousScopeFunction,
                             Range::from_located(scope_keyword),
                         );
-                        if checker.patch(diagnostic.kind.rule()) {
+                        if checker.patch((&diagnostic.kind).into()) {
                             match fix_extraneous_scope_function(
                                 checker.locator,
                                 decorator.location,
@@ -391,7 +391,7 @@ fn check_fixture_returns(checker: &mut Checker, func: &Stmt, func_name: &str, bo
                             },
                             Range::from_located(stmt),
                         );
-                        if checker.patch(diagnostic.kind.rule()) {
+                        if checker.patch((&diagnostic.kind).into()) {
                             diagnostic.amend(Fix::replacement(
                                 "return".to_string(),
                                 stmt.location,
@@ -467,7 +467,7 @@ fn check_fixture_marks(checker: &mut Checker, decorators: &[Expr]) {
             if name == "asyncio" {
                 let mut diagnostic =
                     Diagnostic::new(UnnecessaryAsyncioMarkOnFixture, Range::from_located(mark));
-                if checker.patch(diagnostic.kind.rule()) {
+                if checker.patch((&diagnostic.kind).into()) {
                     let start = Location::new(mark.location.row(), 0);
                     let end = Location::new(mark.end_location.unwrap().row() + 1, 0);
                     diagnostic.amend(Fix::deletion(start, end));
@@ -484,7 +484,7 @@ fn check_fixture_marks(checker: &mut Checker, decorators: &[Expr]) {
             if name == "usefixtures" {
                 let mut diagnostic =
                     Diagnostic::new(ErroneousUseFixturesOnFixture, Range::from_located(mark));
-                if checker.patch(diagnostic.kind.rule()) {
+                if checker.patch((&diagnostic.kind).into()) {
                     let start = Location::new(mark.location.row(), 0);
                     let end = Location::new(mark.end_location.unwrap().row() + 1, 0);
                     diagnostic.amend(Fix::deletion(start, end));

@@ -106,7 +106,7 @@ pub fn negation_with_equal_op(checker: &mut Checker, expr: &Expr, op: &Unaryop, 
         },
         Range::from_located(expr),
     );
-    if checker.patch(diagnostic.kind.rule()) {
+    if checker.patch((&diagnostic.kind).into()) {
         diagnostic.amend(Fix::replacement(
             unparse_expr(
                 &create_expr(ExprKind::Compare {
@@ -157,7 +157,7 @@ pub fn negation_with_not_equal_op(
         },
         Range::from_located(expr),
     );
-    if checker.patch(diagnostic.kind.rule()) {
+    if checker.patch((&diagnostic.kind).into()) {
         diagnostic.amend(Fix::replacement(
             unparse_expr(
                 &create_expr(ExprKind::Compare {
@@ -192,7 +192,7 @@ pub fn double_negation(checker: &mut Checker, expr: &Expr, op: &Unaryop, operand
         },
         Range::from_located(expr),
     );
-    if checker.patch(diagnostic.kind.rule()) {
+    if checker.patch((&diagnostic.kind).into()) {
         diagnostic.amend(Fix::replacement(
             unparse_expr(operand, checker.stylist),
             expr.location,

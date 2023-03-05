@@ -99,7 +99,7 @@ pub fn explicit_true_false_in_ifexpr(
         },
         Range::from_located(expr),
     );
-    if checker.patch(diagnostic.kind.rule()) {
+    if checker.patch((&diagnostic.kind).into()) {
         if matches!(test.node, ExprKind::Compare { .. }) {
             diagnostic.amend(Fix::replacement(
                 unparse_expr(&test.clone(), checker.stylist),
@@ -154,7 +154,7 @@ pub fn explicit_false_true_in_ifexpr(
         },
         Range::from_located(expr),
     );
-    if checker.patch(diagnostic.kind.rule()) {
+    if checker.patch((&diagnostic.kind).into()) {
         diagnostic.amend(Fix::replacement(
             unparse_expr(
                 &create_expr(ExprKind::UnaryOp {
@@ -203,7 +203,7 @@ pub fn twisted_arms_in_ifexpr(
         },
         Range::from_located(expr),
     );
-    if checker.patch(diagnostic.kind.rule()) {
+    if checker.patch((&diagnostic.kind).into()) {
         diagnostic.amend(Fix::replacement(
             unparse_expr(
                 &create_expr(ExprKind::IfExp {

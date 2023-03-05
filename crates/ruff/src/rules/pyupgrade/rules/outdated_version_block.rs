@@ -348,7 +348,7 @@ pub fn outdated_version_block(
                     if compare_version(&version, target, op == &Cmpop::LtE) {
                         let mut diagnostic =
                             Diagnostic::new(OutdatedVersionBlock, Range::from_located(stmt));
-                        if checker.patch(diagnostic.kind.rule()) {
+                        if checker.patch((&diagnostic.kind).into()) {
                             if let Some(block) = metadata(checker.locator, stmt) {
                                 if let Some(fix) =
                                     fix_py2_block(checker, stmt, body, orelse, &block)
@@ -363,7 +363,7 @@ pub fn outdated_version_block(
                     if compare_version(&version, target, op == &Cmpop::GtE) {
                         let mut diagnostic =
                             Diagnostic::new(OutdatedVersionBlock, Range::from_located(stmt));
-                        if checker.patch(diagnostic.kind.rule()) {
+                        if checker.patch((&diagnostic.kind).into()) {
                             if let Some(block) = metadata(checker.locator, stmt) {
                                 if let Some(fix) = fix_py3_block(checker, stmt, test, body, &block)
                                 {
@@ -383,7 +383,7 @@ pub fn outdated_version_block(
                 if version_number == 2 && op == &Cmpop::Eq {
                     let mut diagnostic =
                         Diagnostic::new(OutdatedVersionBlock, Range::from_located(stmt));
-                    if checker.patch(diagnostic.kind.rule()) {
+                    if checker.patch((&diagnostic.kind).into()) {
                         if let Some(block) = metadata(checker.locator, stmt) {
                             if let Some(fix) = fix_py2_block(checker, stmt, body, orelse, &block) {
                                 diagnostic.amend(fix);
@@ -394,7 +394,7 @@ pub fn outdated_version_block(
                 } else if version_number == 3 && op == &Cmpop::Eq {
                     let mut diagnostic =
                         Diagnostic::new(OutdatedVersionBlock, Range::from_located(stmt));
-                    if checker.patch(diagnostic.kind.rule()) {
+                    if checker.patch((&diagnostic.kind).into()) {
                         if let Some(block) = metadata(checker.locator, stmt) {
                             if let Some(fix) = fix_py3_block(checker, stmt, test, body, &block) {
                                 diagnostic.amend(fix);

@@ -7,7 +7,7 @@ use rustpython_parser::ast::Location;
 use crate::ast::types::Range;
 use crate::fix::Fix;
 use crate::linter::FixTable;
-use crate::registry::Diagnostic;
+use crate::registry::{Diagnostic, Rule};
 use crate::source_code::Locator;
 
 pub mod helpers;
@@ -36,7 +36,7 @@ fn apply_fixes<'a>(
             diagnostic
                 .fix
                 .as_ref()
-                .map(|fix| (diagnostic.kind.rule(), fix))
+                .map(|fix| (Into::<&Rule>::into(&diagnostic.kind), fix))
         })
         .sorted_by_key(|(.., fix)| fix.location)
     {
