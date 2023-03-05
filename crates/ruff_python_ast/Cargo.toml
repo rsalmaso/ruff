@@ -1,0 +1,15 @@
+[package]
+name = "ruff_python_ast"
+version = "0.0.0"
+publish = false
+edition = { workspace = true }
+rust-version = { workspace = true }
+
+[dependencies]
+ruff_linter = { path = "../ruff_linter" }
+
+once_cell = { workspace = true }
+regex = { workspace = true }
+rustpython-common = { workspace = true }
+rustpython-parser = { workspace = true }
+serde = { workspace = true }
