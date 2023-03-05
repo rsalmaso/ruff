@@ -59,6 +59,19 @@ pub fn define_violation(input: &TokenStream, meta: LintMeta) -> TokenStream {
         quote! {
             #[derive(Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
             #input
+
+            impl From<#name> for crate::registry::DiagnosticKind2 {
+                fn from(value: #name) -> Self {
+                    use crate::violation::Violation;
+
+                    Self {
+                        body: Violation::message(&value),
+                        fixable: value.autofix_title_formatter().is_some(),
+                        commit: value.autofix_title_formatter().map(|f| f(&value)),
+                        rule: "#name".to_string(),
+                    }
+                }
+            }
         }
     } else {
         quote! {
@@ -68,6 +81,19 @@ pub fn define_violation(input: &TokenStream, meta: LintMeta) -> TokenStream {
             impl #name {
                 pub fn explanation() -> Option<&'static str> {
                     Some(#explanation)
+                }
+            }
+
+            impl From<#name> for crate::registry::DiagnosticKind2 {
+                fn from(value: #name) -> Self {
+                    use crate::violation::Violation;
+
+                    Self {
+                        body: Violation::message(&value),
+                        fixable: value.autofix_title_formatter().is_some(),
+                        commit: value.autofix_title_formatter().map(|f| f(&value)),
+                        rule: "#name".to_string(),
+                    }
                 }
             }
         }

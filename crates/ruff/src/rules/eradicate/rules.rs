@@ -1,10 +1,11 @@
-use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::Location;
 
-use super::detection::comment_contains_code;
+use ruff_macros::{derive_message_formats, violation};
+
 use crate::ast::types::Range;
 use crate::fix::Fix;
 use crate::registry::{Diagnostic, Rule};
+use crate::rules::eradicate::detection::comment_contains_code;
 use crate::settings::{flags, Settings};
 use crate::source_code::Locator;
 use crate::violation::AlwaysAutofixableViolation;
