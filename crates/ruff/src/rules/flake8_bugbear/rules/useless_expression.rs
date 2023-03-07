@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Constant, ExprKind, Stmt, StmtKind};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -22,18 +21,16 @@ pub fn useless_expression(checker: &mut Checker, body: &[Stmt]) {
         if let StmtKind::Expr { value } = &stmt.node {
             match &value.node {
                 ExprKind::List { .. } | ExprKind::Dict { .. } | ExprKind::Set { .. } => {
-                    checker.diagnostics.push(Diagnostic::new(
-                        UselessExpression,
-                        Range::from_located(value),
-                    ));
+                    checker
+                        .diagnostics
+                        .push(Diagnostic::new(UselessExpression, value.into()));
                 }
                 ExprKind::Constant { value: val, .. } => match &val {
                     Constant::Str { .. } | Constant::Ellipsis => {}
                     _ => {
-                        checker.diagnostics.push(Diagnostic::new(
-                            UselessExpression,
-                            Range::from_located(value),
-                        ));
+                        checker
+                            .diagnostics
+                            .push(Diagnostic::new(UselessExpression, value.into()));
                     }
                 },
                 _ => {}

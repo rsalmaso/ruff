@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Constant, Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -47,7 +46,7 @@ pub fn raise_vanilla_args(checker: &mut Checker, expr: &Expr) {
             {
                 checker
                     .diagnostics
-                    .push(Diagnostic::new(RaiseVanillaArgs, Range::from_located(expr)));
+                    .push(Diagnostic::new(RaiseVanillaArgs, expr.into()));
             }
         }
     }

@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{ExprKind, Stmt, Withitem};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -61,8 +60,7 @@ pub fn assert_raises_exception(checker: &mut Checker, stmt: &Stmt, items: &[With
         return;
     }
 
-    checker.diagnostics.push(Diagnostic::new(
-        AssertRaisesException,
-        Range::from_located(stmt),
-    ));
+    checker
+        .diagnostics
+        .push(Diagnostic::new(AssertRaisesException, stmt.into()));
 }

@@ -8,7 +8,7 @@ use ruff_python_stdlib::keyword::KWLIST;
 
 use crate::ast::comparable::ComparableExpr;
 use crate::ast::helpers::{match_trailing_comment, unparse_expr};
-use crate::ast::types::{Range, RefEquality};
+use crate::ast::types::RefEquality;
 use crate::autofix::helpers::delete_stmt;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
@@ -170,8 +170,7 @@ pub fn no_unnecessary_pass(checker: &mut Checker, body: &[Stmt]) {
             }
         ) {
             if matches!(pass_stmt.node, StmtKind::Pass) {
-                let mut diagnostic =
-                    Diagnostic::new(UnnecessaryPass, Range::from_located(pass_stmt));
+                let mut diagnostic = Diagnostic::new(UnnecessaryPass, pass_stmt.into());
                 if checker.patch(diagnostic.kind.rule()) {
                     if let Some(index) = match_trailing_comment(pass_stmt, checker.locator) {
                         diagnostic.amend(Fix::deletion(
@@ -238,10 +237,8 @@ pub fn dupe_class_field_definitions<'a, 'b>(
         };
 
         if !seen_targets.insert(target) {
-            let mut diagnostic = Diagnostic::new(
-                DupeClassFieldDefinitions(target.to_string()),
-                Range::from_located(stmt),
-            );
+            let mut diagnostic =
+                Diagnostic::new(DupeClassFieldDefinitions(target.to_string()), stmt.into());
             if checker.patch(diagnostic.kind.rule()) {
                 let deleted: Vec<&Stmt> = checker.deletions.iter().map(Into::into).collect();
                 let locator = checker.locator;
@@ -306,7 +303,7 @@ where
                 PreferUniqueEnums {
                     value: unparse_expr(value, checker.stylist),
                 },
-                Range::from_located(stmt),
+                stmt.into(),
             );
             checker.diagnostics.push(diagnostic);
         }
@@ -320,7 +317,7 @@ pub fn no_unnecessary_spread(checker: &mut Checker, keys: &[Option<Expr>], value
             // We only care about when the key is None which indicates a spread `**`
             // inside a dict.
             if let ExprKind::Dict { .. } = value.node {
-                let diagnostic = Diagnostic::new(UnnecessarySpread, Range::from_located(value));
+                let diagnostic = Diagnostic::new(UnnecessarySpread, value.into());
                 checker.diagnostics.push(diagnostic);
             }
         }
@@ -340,8 +337,7 @@ pub fn unnecessary_comprehension_any_all(
                 return;
             }
             if let ExprKind::ListComp { .. } = args[0].node {
-                let mut diagnostic =
-                    Diagnostic::new(UnnecessaryComprehensionAnyAll, Range::from_located(expr));
+                let mut diagnostic = Diagnostic::new(UnnecessaryComprehensionAnyAll, expr.into());
                 if checker.patch(diagnostic.kind.rule()) {
                     match fixes::fix_unnecessary_comprehension_any_all(
                         checker.locator,
@@ -384,8 +380,7 @@ pub fn no_unnecessary_dict_kwargs(checker: &mut Checker, expr: &Expr, kwargs: &[
                     // handle case of foo(**{**bar})
                     (keys.len() == 1 && keys[0].is_none())
                 {
-                    let diagnostic =
-                        Diagnostic::new(UnnecessaryDictKwargs, Range::from_located(expr));
+                    let diagnostic = Diagnostic::new(UnnecessaryDictKwargs, expr.into());
                     checker.diagnostics.push(diagnostic);
                 }
             }
@@ -422,7 +417,7 @@ pub fn single_starts_ends_with(checker: &mut Checker, values: &[Expr], node: &Bo
                             SingleStartsEndsWith {
                                 attr: attr.to_string(),
                             },
-                            Range::from_located(value),
+                            value.into(),
                         ));
                     }
                 }
@@ -444,7 +439,7 @@ pub fn prefer_list_builtin(checker: &mut Checker, expr: &Expr) {
     {
         if let ExprKind::List { elts, .. } = &body.node {
             if elts.is_empty() {
-                let mut diagnostic = Diagnostic::new(PreferListBuiltin, Range::from_located(expr));
+                let mut diagnostic = Diagnostic::new(PreferListBuiltin, expr.into());
                 if checker.patch(diagnostic.kind.rule()) {
                     diagnostic.amend(Fix::replacement(
                         "list".to_string(),

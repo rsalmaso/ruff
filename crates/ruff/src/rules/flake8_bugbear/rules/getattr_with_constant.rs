@@ -5,7 +5,7 @@ use ruff_python_stdlib::identifiers::{is_identifier, is_mangled_private};
 use ruff_python_stdlib::keyword::KWLIST;
 
 use crate::ast::helpers::unparse_expr;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -63,7 +63,7 @@ pub fn getattr_with_constant(checker: &mut Checker, expr: &Expr, func: &Expr, ar
         return;
     }
 
-    let mut diagnostic = Diagnostic::new(GetAttrWithConstant, Range::from_located(expr));
+    let mut diagnostic = Diagnostic::new(GetAttrWithConstant, expr.into());
 
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(

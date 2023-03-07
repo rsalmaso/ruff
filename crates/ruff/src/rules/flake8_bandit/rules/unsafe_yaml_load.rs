@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind, Keyword};
 
 use crate::ast::helpers::SimpleCallArgs;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -55,13 +55,13 @@ pub fn unsafe_yaml_load(checker: &mut Checker, func: &Expr, args: &[Expr], keywo
                 };
                 checker.diagnostics.push(Diagnostic::new(
                     UnsafeYAMLLoad { loader },
-                    Range::from_located(loader_arg),
+                    loader_arg.into(),
                 ));
             }
         } else {
             checker.diagnostics.push(Diagnostic::new(
                 UnsafeYAMLLoad { loader: None },
-                Range::from_located(func),
+                func.into(),
             ));
         }
     }

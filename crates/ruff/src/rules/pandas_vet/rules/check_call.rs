@@ -2,7 +2,7 @@ use rustpython_parser::ast::{Expr, ExprKind};
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::{BindingKind, Range};
+use crate::ast::types::BindingKind;
 use crate::checkers::ast::Checker;
 use crate::registry::{Diagnostic, DiagnosticKind, Rule};
 use crate::rules::pandas_vet::helpers::is_dataframe_candidate;
@@ -105,5 +105,5 @@ pub fn check_call(checker: &mut Checker, func: &Expr) {
 
     checker
         .diagnostics
-        .push(Diagnostic::new(violation, Range::from_located(func)));
+        .push(Diagnostic::new(violation, func.into()));
 }

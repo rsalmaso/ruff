@@ -2,13 +2,12 @@ use anyhow::{bail, Result};
 use rustpython_parser::ast::Stmt;
 use rustpython_parser::{lexer, Mode, Tok};
 
-use crate::ast::types::Range;
 use crate::fix::Fix;
 use crate::source_code::Locator;
 
 /// ANN204
 pub fn add_return_none_annotation(locator: &Locator, stmt: &Stmt) -> Result<Fix> {
-    let range = Range::from_located(stmt);
+    let range = stmt.into();
     let contents = locator.slice(range);
 
     // Find the colon (following the `def` keyword).

@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind, Keyword};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -34,10 +33,9 @@ pub fn zip_without_explicit_strict(
                     .map_or(false, |name| name == "strict")
             })
         {
-            checker.diagnostics.push(Diagnostic::new(
-                ZipWithoutExplicitStrict,
-                Range::from_located(expr),
-            ));
+            checker
+                .diagnostics
+                .push(Diagnostic::new(ZipWithoutExplicitStrict, expr.into()));
         }
     }
 }

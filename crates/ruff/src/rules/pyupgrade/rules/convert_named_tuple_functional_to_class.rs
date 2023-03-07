@@ -7,7 +7,7 @@ use ruff_python_stdlib::identifiers::is_identifier;
 use ruff_python_stdlib::keyword::KWLIST;
 
 use crate::ast::helpers::{create_expr, create_stmt, unparse_stmt};
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -203,7 +203,7 @@ pub fn convert_named_tuple_functional_to_class(
             name: typename.to_string(),
             fixable,
         },
-        Range::from_located(stmt),
+        stmt.into(),
     );
     if fixable && checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(convert_to_class(

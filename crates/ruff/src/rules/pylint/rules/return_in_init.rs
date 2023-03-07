@@ -2,7 +2,6 @@ use rustpython_parser::ast::{Constant, ExprKind, Stmt, StmtKind};
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::rules::pylint::helpers::in_dunder_init;
@@ -67,6 +66,6 @@ pub fn return_in_init(checker: &mut Checker, stmt: &Stmt) {
     if in_dunder_init(checker) {
         checker
             .diagnostics
-            .push(Diagnostic::new(ReturnInInit, Range::from_located(stmt)));
+            .push(Diagnostic::new(ReturnInInit, stmt.into()));
     }
 }

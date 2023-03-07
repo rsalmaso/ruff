@@ -3,7 +3,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind, Keyword};
 
 use super::helpers;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::rules::flake8_comprehensions::fixes;
@@ -56,7 +56,7 @@ pub fn unnecessary_literal_dict(
         UnnecessaryLiteralDict {
             obj_type: kind.to_string(),
         },
-        Range::from_located(expr),
+        expr.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         match fixes::fix_unnecessary_literal_dict(checker.locator, checker.stylist, expr) {

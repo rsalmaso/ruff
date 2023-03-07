@@ -6,7 +6,7 @@ use rustpython_parser::ast::{Expr, ExprKind};
 
 use crate::ast::comparable::{ComparableConstant, ComparableExpr};
 use crate::ast::helpers::unparse_expr;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::{Diagnostic, Rule};
@@ -106,7 +106,7 @@ pub fn repeated_keys(checker: &mut Checker, keys: &[Option<Expr>], values: &[Exp
                                     name: unparse_expr(key, checker.stylist),
                                     repeated_value: is_duplicate_value,
                                 },
-                                Range::from_located(key),
+                                key.into(),
                             );
                             if is_duplicate_value {
                                 if checker.patch(diagnostic.kind.rule()) {
@@ -134,7 +134,7 @@ pub fn repeated_keys(checker: &mut Checker, keys: &[Option<Expr>], values: &[Exp
                                     name: dict_key.to_string(),
                                     repeated_value: is_duplicate_value,
                                 },
-                                Range::from_located(key),
+                                key.into(),
                             );
                             if is_duplicate_value {
                                 if checker.patch(diagnostic.kind.rule()) {

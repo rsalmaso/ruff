@@ -3,7 +3,7 @@ use rustpython_parser::ast::{Expr, ExprKind};
 use ruff_macros::{derive_message_formats, violation};
 
 use crate::ast::helpers::collect_call_path;
-use crate::ast::types::{Range, ScopeKind};
+use crate::ast::types::ScopeKind;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -120,7 +120,7 @@ pub fn private_member_access(checker: &mut Checker, expr: &Expr) {
                 PrivateMemberAccess {
                     access: attr.to_string(),
                 },
-                Range::from_located(expr),
+                expr.into(),
             ));
         }
     }

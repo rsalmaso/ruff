@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Constant, Expr, ExprContext, ExprKind, Location, Stmt, StmtKind};
 
 use crate::ast::helpers::unparse_stmt;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -61,7 +61,7 @@ pub fn assert_false(checker: &mut Checker, stmt: &Stmt, test: &Expr, msg: Option
         return;
     };
 
-    let mut diagnostic = Diagnostic::new(AssertFalse, Range::from_located(test));
+    let mut diagnostic = Diagnostic::new(AssertFalse, test.into());
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(
             unparse_stmt(&assertion_error(msg), checker.stylist),

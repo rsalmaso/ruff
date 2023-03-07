@@ -3,7 +3,7 @@ use strum::IntoEnumIterator;
 use ruff_macros::{derive_message_formats, violation};
 
 use crate::ast::strings::leading_quote;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::docstrings::definition::Docstring;
 use crate::docstrings::sections::SectionKind;
@@ -60,7 +60,7 @@ pub fn ends_with_period(checker: &mut Checker, docstring: &Docstring) {
         let trimmed = line.trim_end();
 
         if !trimmed.ends_with('.') {
-            let mut diagnostic = Diagnostic::new(EndsInPeriod, Range::from_located(docstring.expr));
+            let mut diagnostic = Diagnostic::new(EndsInPeriod, docstring.expr.into());
             // Best-effort autofix: avoid adding a period after other punctuation marks.
             if checker.patch(diagnostic.kind.rule())
                 && !trimmed.ends_with(':')

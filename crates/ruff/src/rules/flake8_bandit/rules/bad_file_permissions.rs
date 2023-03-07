@@ -5,7 +5,7 @@ use rustc_hash::FxHashMap;
 use rustpython_parser::ast::{Constant, Expr, ExprKind, Keyword, Operator};
 
 use crate::ast::helpers::{compose_call_path, SimpleCallArgs};
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -113,7 +113,7 @@ pub fn bad_file_permissions(
                 if (int_value & WRITE_WORLD > 0) || (int_value & EXECUTE_GROUP > 0) {
                     checker.diagnostics.push(Diagnostic::new(
                         BadFilePermissions { mask: int_value },
-                        Range::from_located(mode_arg),
+                        mode_arg.into(),
                     ));
                 }
             }

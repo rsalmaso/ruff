@@ -2,7 +2,6 @@ use itertools::Itertools;
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Alias, AliasData, Stmt};
 
-use crate::ast::types::Range;
 use crate::ast::whitespace::indentation;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
@@ -350,7 +349,7 @@ impl<'a> ImportReplacer<'a> {
 
             let matched = ImportReplacer::format_import_from(&matched_names, target);
             let unmatched = fixes::remove_import_members(
-                self.locator.slice(Range::from_located(self.stmt)),
+                self.locator.slice(self.stmt.into()),
                 &matched_names
                     .iter()
                     .map(|name| name.name.as_str())
@@ -443,7 +442,7 @@ pub fn import_replacements(
                     .collect(),
                 fixable: replacement.content.is_some(),
             },
-            Range::from_located(stmt),
+            stmt.into(),
         );
         if checker.patch(&Rule::ImportReplacements) {
             if let Some(content) = replacement.content {

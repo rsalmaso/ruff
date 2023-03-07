@@ -1,7 +1,7 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::Stmt;
 
-use crate::ast::types::{Range, ScopeKind};
+use crate::ast::types::ScopeKind;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -22,10 +22,9 @@ pub fn return_outside_function(checker: &mut Checker, stmt: &Stmt) {
             checker.ctx.scopes[index].kind,
             ScopeKind::Class(_) | ScopeKind::Module
         ) {
-            checker.diagnostics.push(Diagnostic::new(
-                ReturnOutsideFunction,
-                Range::from_located(stmt),
-            ));
+            checker
+                .diagnostics
+                .push(Diagnostic::new(ReturnOutsideFunction, stmt.into()));
         }
     }
 }

@@ -171,10 +171,7 @@ pub fn explicit(expr: &Expr) -> Option<Diagnostic> {
                         ..
                     }
             ) {
-                return Some(Diagnostic::new(
-                    ExplicitStringConcatenation,
-                    Range::from_located(expr),
-                ));
+                return Some(Diagnostic::new(ExplicitStringConcatenation, expr.into()));
             }
         }
     }

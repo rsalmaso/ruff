@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -23,7 +22,7 @@ pub fn use_of_pd_merge(func: &Expr) -> Option<Diagnostic> {
     if let ExprKind::Attribute { attr, value, .. } = &func.node {
         if let ExprKind::Name { id, .. } = &value.node {
             if id == "pd" && attr == "merge" {
-                return Some(Diagnostic::new(UseOfPdMerge, Range::from_located(func)));
+                return Some(Diagnostic::new(UseOfPdMerge, func.into()));
             }
         }
     }

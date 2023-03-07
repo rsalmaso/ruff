@@ -140,10 +140,7 @@ fn percent_to_format(format_string: &CFormatString) -> String {
 
 /// If a tuple has one argument, remove the comma; otherwise, return it as-is.
 fn clean_params_tuple(checker: &mut Checker, right: &Expr) -> String {
-    let mut contents = checker
-        .locator
-        .slice(Range::from_located(right))
-        .to_string();
+    let mut contents = checker.locator.slice(right.into()).to_string();
     if let ExprKind::Tuple { elts, .. } = &right.node {
         if elts.len() == 1 {
             if right.location.row() == right.end_location.unwrap().row() {
@@ -196,7 +193,7 @@ fn clean_params_dictionary(checker: &mut Checker, right: &Expr) -> Option<String
                             }
                         }
 
-                        let value_string = checker.locator.slice(Range::from_located(value));
+                        let value_string = checker.locator.slice(value.into());
                         arguments.push(format!("{key_string}={value_string}"));
                     } else {
                         // If there are any non-string keys, abort.
@@ -204,7 +201,7 @@ fn clean_params_dictionary(checker: &mut Checker, right: &Expr) -> Option<String
                     }
                 }
                 None => {
-                    let value_string = checker.locator.slice(Range::from_located(value));
+                    let value_string = checker.locator.slice(value.into());
                     arguments.push(format!("**{value_string}"));
                 }
             }
@@ -320,7 +317,7 @@ pub(crate) fn printf_string_formatting(
     let mut strings: Vec<(Location, Location)> = vec![];
     let mut extension = None;
     for (start, tok, end) in lexer::lex_located(
-        checker.locator.slice(Range::from_located(expr)),
+        checker.locator.slice(expr.into()),
         Mode::Module,
         expr.location,
     )
@@ -401,7 +398,7 @@ pub(crate) fn printf_string_formatting(
     // Add the `.format` call.
     contents.push_str(&format!(".format{params_string}"));
 
-    let mut diagnostic = Diagnostic::new(PrintfStringFormatting, Range::from_located(expr));
+    let mut diagnostic = Diagnostic::new(PrintfStringFormatting, expr.into());
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(
             contents,

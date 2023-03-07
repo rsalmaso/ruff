@@ -5,7 +5,6 @@ use rustc_hash::FxHashSet;
 use rustpython_parser::ast::{Constant, Expr, ExprKind};
 use serde::{Deserialize, Serialize};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::settings::types::PythonVersion;
@@ -133,7 +132,7 @@ pub fn bad_str_strip_call(checker: &mut Checker, func: &Expr, args: &[Expr]) {
                             };
                             checker.diagnostics.push(Diagnostic::new(
                                 BadStrStripCall { strip, removal },
-                                Range::from_located(arg),
+                                arg.into(),
                             ));
                         }
                     }

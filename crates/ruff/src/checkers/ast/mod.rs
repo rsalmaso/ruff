@@ -195,7 +195,7 @@ where
                     // Add the binding to the current scope.
                     let context = self.ctx.execution_context();
                     let scope = &mut self.ctx.scopes[scope_index];
-                    let usage = Some((scope.id, Range::from_located(stmt)));
+                    let usage = Some((scope.id, stmt.into()));
                     for (name, range) in names.iter().zip(ranges.iter()) {
                         let index = self.ctx.bindings.len();
                         self.ctx.bindings.push(Binding {
@@ -224,7 +224,7 @@ where
                 if scope_index != GLOBAL_SCOPE_INDEX {
                     let context = self.ctx.execution_context();
                     let scope = &mut self.ctx.scopes[scope_index];
-                    let usage = Some((scope.id, Range::from_located(stmt)));
+                    let usage = Some((scope.id, stmt.into()));
                     for (name, range) in names.iter().zip(ranges.iter()) {
                         // Add a binding to the current scope.
                         let index = self.ctx.bindings.len();
@@ -665,7 +665,7 @@ where
                         runtime_usage: None,
                         synthetic_usage: None,
                         typing_usage: None,
-                        range: Range::from_located(stmt),
+                        range: stmt.into(),
                         source: Some(self.ctx.current_stmt().clone()),
                         context,
                     },
@@ -862,10 +862,10 @@ where
                                         .last()
                                         .expect("No current scope found"))]
                                     .id,
-                                    Range::from_located(alias),
+                                    alias.into(),
                                 )),
                                 typing_usage: None,
-                                range: Range::from_located(alias),
+                                range: alias.into(),
                                 source: Some(self.ctx.current_stmt().clone()),
                                 context: self.ctx.execution_context(),
                             },
@@ -876,7 +876,7 @@ where
                         {
                             self.diagnostics.push(Diagnostic::new(
                                 pyflakes::rules::LateFutureImport,
-                                Range::from_located(stmt),
+                                stmt.into(),
                             ));
                         }
                     } else if alias.node.name.contains('.') && alias.node.asname.is_none() {
@@ -897,13 +897,13 @@ where
                                             .last()
                                             .expect("No current scope found"))]
                                         .id,
-                                        Range::from_located(alias),
+                                        alias.into(),
                                     ))
                                 } else {
                                     None
                                 },
                                 typing_usage: None,
-                                range: Range::from_located(alias),
+                                range: alias.into(),
                                 source: Some(self.ctx.current_stmt().clone()),
                                 context: self.ctx.execution_context(),
                             },
@@ -935,13 +935,13 @@ where
                                             .last()
                                             .expect("No current scope found"))]
                                         .id,
-                                        Range::from_located(alias),
+                                        alias.into(),
                                     ))
                                 } else {
                                     None
                                 },
                                 typing_usage: None,
-                                range: Range::from_located(alias),
+                                range: alias.into(),
                                 source: Some(self.ctx.current_stmt().clone()),
                                 context: self.ctx.execution_context(),
                             },
@@ -1208,10 +1208,10 @@ where
                                         .last()
                                         .expect("No current scope found"))]
                                     .id,
-                                    Range::from_located(alias),
+                                    alias.into(),
                                 )),
                                 typing_usage: None,
-                                range: Range::from_located(alias),
+                                range: alias.into(),
                                 source: Some(self.ctx.current_stmt().clone()),
                                 context: self.ctx.execution_context(),
                             },
@@ -1230,7 +1230,7 @@ where
                         {
                             self.diagnostics.push(Diagnostic::new(
                                 pyflakes::rules::LateFutureImport,
-                                Range::from_located(stmt),
+                                stmt.into(),
                             ));
                         }
                     } else if alias.node.name == "*" {
@@ -1247,13 +1247,13 @@ where
                                             .last()
                                             .expect("No current scope found"))]
                                         .id,
-                                        Range::from_located(alias),
+                                        alias.into(),
                                     ))
                                 } else {
                                     None
                                 },
                                 typing_usage: None,
-                                range: Range::from_located(stmt),
+                                range: stmt.into(),
                                 source: Some(self.ctx.current_stmt().clone()),
                                 context: self.ctx.execution_context(),
                             },
@@ -1270,7 +1270,7 @@ where
                                             module.as_deref(),
                                         ),
                                     },
-                                    Range::from_located(stmt),
+                                    stmt.into(),
                                 ));
                             }
                         }
@@ -1283,7 +1283,7 @@ where
                                         module.as_deref(),
                                     ),
                                 },
-                                Range::from_located(stmt),
+                                stmt.into(),
                             ));
                         }
 
@@ -1325,13 +1325,13 @@ where
                                             .last()
                                             .expect("No current scope found"))]
                                         .id,
-                                        Range::from_located(alias),
+                                        alias.into(),
                                     ))
                                 } else {
                                     None
                                 },
                                 typing_usage: None,
-                                range: Range::from_located(alias),
+                                range: alias.into(),
 
                                 source: Some(self.ctx.current_stmt().clone()),
                                 context: self.ctx.execution_context(),
@@ -1953,7 +1953,7 @@ where
                             runtime_usage: None,
                             synthetic_usage: None,
                             typing_usage: None,
-                            range: Range::from_located(stmt),
+                            range: stmt.into(),
                             source: Some(RefEquality(stmt)),
                             context: self.ctx.execution_context(),
                         });
@@ -2018,7 +2018,7 @@ where
                             runtime_usage: None,
                             synthetic_usage: None,
                             typing_usage: None,
-                            range: Range::from_located(stmt),
+                            range: (*stmt).into(),
                             source: Some(RefEquality(stmt)),
                             context: self.ctx.execution_context(),
                         });
@@ -2142,7 +2142,7 @@ where
                         runtime_usage: None,
                         synthetic_usage: None,
                         typing_usage: None,
-                        range: Range::from_located(stmt),
+                        range: stmt.into(),
                         source: Some(self.ctx.current_stmt().clone()),
                         context: self.ctx.execution_context(),
                     },
@@ -2172,7 +2172,7 @@ where
             } = &expr.node
             {
                 self.deferred.string_type_definitions.push((
-                    Range::from_located(expr),
+                    expr.into(),
                     value,
                     (self.ctx.in_annotation, self.ctx.in_type_checking_block),
                     (self.ctx.scope_stack.clone(), self.ctx.parents.clone()),
@@ -2238,7 +2238,7 @@ where
                         elts,
                         check_too_many_expressions,
                         check_two_starred_expressions,
-                        Range::from_located(expr),
+                        expr.into(),
                     ) {
                         self.diagnostics.push(diagnostic);
                     }
@@ -2273,10 +2273,9 @@ where
                     }
                     ExprContext::Store => {
                         if self.settings.rules.enabled(&Rule::AmbiguousVariableName) {
-                            if let Some(diagnostic) = pycodestyle::rules::ambiguous_variable_name(
-                                id,
-                                Range::from_located(expr),
-                            ) {
+                            if let Some(diagnostic) =
+                                pycodestyle::rules::ambiguous_variable_name(id, expr.into())
+                            {
                                 self.diagnostics.push(diagnostic);
                             }
                         }
@@ -2361,7 +2360,7 @@ where
                         {
                             if attr == "format" {
                                 // "...".format(...) call
-                                let location = Range::from_located(expr);
+                                let location = expr.into();
                                 match pyflakes::format::FormatSummary::try_from(value.as_ref()) {
                                     Err(e) => {
                                         if self
@@ -2757,22 +2756,14 @@ where
                         func,
                         args,
                         keywords,
-                        Range::from_located(expr),
+                        expr.into(),
                     );
                 }
                 if self.settings.rules.enabled(&Rule::CallDatetimeToday) {
-                    flake8_datetimez::rules::call_datetime_today(
-                        self,
-                        func,
-                        Range::from_located(expr),
-                    );
+                    flake8_datetimez::rules::call_datetime_today(self, func, expr.into());
                 }
                 if self.settings.rules.enabled(&Rule::CallDatetimeUtcnow) {
-                    flake8_datetimez::rules::call_datetime_utcnow(
-                        self,
-                        func,
-                        Range::from_located(expr),
-                    );
+                    flake8_datetimez::rules::call_datetime_utcnow(self, func, expr.into());
                 }
                 if self
                     .settings
@@ -2782,7 +2773,7 @@ where
                     flake8_datetimez::rules::call_datetime_utcfromtimestamp(
                         self,
                         func,
-                        Range::from_located(expr),
+                        expr.into(),
                     );
                 }
                 if self
@@ -2795,7 +2786,7 @@ where
                         func,
                         args,
                         keywords,
-                        Range::from_located(expr),
+                        expr.into(),
                     );
                 }
                 if self
@@ -2808,7 +2799,7 @@ where
                         func,
                         args,
                         keywords,
-                        Range::from_located(expr),
+                        expr.into(),
                     );
                 }
                 if self
@@ -2820,18 +2811,14 @@ where
                         self,
                         func,
                         args,
-                        Range::from_located(expr),
+                        expr.into(),
                     );
                 }
                 if self.settings.rules.enabled(&Rule::CallDateToday) {
-                    flake8_datetimez::rules::call_date_today(self, func, Range::from_located(expr));
+                    flake8_datetimez::rules::call_date_today(self, func, expr.into());
                 }
                 if self.settings.rules.enabled(&Rule::CallDateFromtimestamp) {
-                    flake8_datetimez::rules::call_date_fromtimestamp(
-                        self,
-                        func,
-                        Range::from_located(expr),
-                    );
+                    flake8_datetimez::rules::call_date_fromtimestamp(self, func, expr.into());
                 }
 
                 // pygrep-hooks
@@ -3060,7 +3047,7 @@ where
                             .rules
                             .enabled(&Rule::PercentFormatUnsupportedFormatCharacter)
                     {
-                        let location = Range::from_located(expr);
+                        let location = expr.into();
                         match pyflakes::cformat::CFormatSummary::try_from(value.as_str()) {
                             Err(CFormatError {
                                 typ: CFormatErrorType::UnsupportedFormatChar(c),
@@ -3249,7 +3236,7 @@ where
                         left,
                         ops,
                         comparators,
-                        Range::from_located(expr),
+                        expr.into(),
                     );
                 }
 
@@ -3257,7 +3244,7 @@ where
                     self.diagnostics.extend(pycodestyle::rules::type_comparison(
                         ops,
                         comparators,
-                        Range::from_located(expr),
+                        expr.into(),
                     ));
                 }
 
@@ -3334,7 +3321,7 @@ where
             } => {
                 if self.ctx.in_type_definition && !self.ctx.in_literal {
                     self.deferred.string_type_definitions.push((
-                        Range::from_located(expr),
+                        expr.into(),
                         value,
                         (self.ctx.in_annotation, self.ctx.in_type_checking_block),
                         (self.ctx.scope_stack.clone(), self.ctx.parents.clone()),
@@ -3345,10 +3332,9 @@ where
                     .rules
                     .enabled(&Rule::HardcodedBindAllInterfaces)
                 {
-                    if let Some(diagnostic) = flake8_bandit::rules::hardcoded_bind_all_interfaces(
-                        value,
-                        &Range::from_located(expr),
-                    ) {
+                    if let Some(diagnostic) =
+                        flake8_bandit::rules::hardcoded_bind_all_interfaces(value, &expr.into())
+                    {
                         self.diagnostics.push(diagnostic);
                     }
                 }
@@ -3930,7 +3916,7 @@ where
                 runtime_usage: None,
                 synthetic_usage: None,
                 typing_usage: None,
-                range: Range::from_located(arg),
+                range: arg.into(),
                 source: Some(self.ctx.current_stmt().clone()),
                 context: self.ctx.execution_context(),
             },
@@ -3938,7 +3924,7 @@ where
 
         if self.settings.rules.enabled(&Rule::AmbiguousVariableName) {
             if let Some(diagnostic) =
-                pycodestyle::rules::ambiguous_variable_name(&arg.node.arg, Range::from_located(arg))
+                pycodestyle::rules::ambiguous_variable_name(&arg.node.arg, arg.into())
             {
                 self.diagnostics.push(diagnostic);
             }
@@ -3973,7 +3959,7 @@ where
                     runtime_usage: None,
                     synthetic_usage: None,
                     typing_usage: None,
-                    range: Range::from_located(pattern),
+                    range: pattern.into(),
                     source: Some(self.ctx.current_stmt().clone()),
                     context: self.ctx.execution_context(),
                 },
@@ -4184,7 +4170,7 @@ impl<'a> Checker<'a> {
             if let Some(index) = scope.bindings.get(&id.as_str()) {
                 // Mark the binding as used.
                 let context = self.ctx.execution_context();
-                self.ctx.bindings[*index].mark_used(scope_id, Range::from_located(expr), context);
+                self.ctx.bindings[*index].mark_used(scope_id, expr.into(), context);
 
                 if self.ctx.bindings[*index].kind.is_annotation()
                     && !self.ctx.in_deferred_string_type_definition
@@ -4212,11 +4198,7 @@ impl<'a> Checker<'a> {
                         if has_alias {
                             // Mark the sub-importation as used.
                             if let Some(index) = scope.bindings.get(full_name) {
-                                self.ctx.bindings[*index].mark_used(
-                                    scope_id,
-                                    Range::from_located(expr),
-                                    context,
-                                );
+                                self.ctx.bindings[*index].mark_used(scope_id, expr.into(), context);
                             }
                         }
                     }
@@ -4229,11 +4211,7 @@ impl<'a> Checker<'a> {
                         if has_alias {
                             // Mark the sub-importation as used.
                             if let Some(index) = scope.bindings.get(full_name.as_str()) {
-                                self.ctx.bindings[*index].mark_used(
-                                    scope_id,
-                                    Range::from_located(expr),
-                                    context,
-                                );
+                                self.ctx.bindings[*index].mark_used(scope_id, expr.into(), context);
                             }
                         }
                     }
@@ -4273,7 +4251,7 @@ impl<'a> Checker<'a> {
                         name: id.to_string(),
                         sources: from_list,
                     },
-                    Range::from_located(expr),
+                    expr.into(),
                 ));
             }
             return;
@@ -4304,7 +4282,7 @@ impl<'a> Checker<'a> {
 
             self.diagnostics.push(Diagnostic::new(
                 pyflakes::rules::UndefinedName { name: id.clone() },
-                Range::from_located(expr),
+                expr.into(),
             ));
         }
     }
@@ -4376,7 +4354,7 @@ impl<'a> Checker<'a> {
                     runtime_usage: None,
                     synthetic_usage: None,
                     typing_usage: None,
-                    range: Range::from_located(expr),
+                    range: expr.into(),
                     source: Some(self.ctx.current_stmt().clone()),
                     context: self.ctx.execution_context(),
                 },
@@ -4396,7 +4374,7 @@ impl<'a> Checker<'a> {
                     runtime_usage: None,
                     synthetic_usage: None,
                     typing_usage: None,
-                    range: Range::from_located(expr),
+                    range: expr.into(),
                     source: Some(self.ctx.current_stmt().clone()),
                     context: self.ctx.execution_context(),
                 },
@@ -4412,7 +4390,7 @@ impl<'a> Checker<'a> {
                     runtime_usage: None,
                     synthetic_usage: None,
                     typing_usage: None,
-                    range: Range::from_located(expr),
+                    range: expr.into(),
                     source: Some(self.ctx.current_stmt().clone()),
                     context: self.ctx.execution_context(),
                 },
@@ -4477,7 +4455,7 @@ impl<'a> Checker<'a> {
                         runtime_usage: None,
                         synthetic_usage: None,
                         typing_usage: None,
-                        range: Range::from_located(expr),
+                        range: expr.into(),
                         source: Some(self.ctx.current_stmt().clone()),
                         context: self.ctx.execution_context(),
                     },
@@ -4493,7 +4471,7 @@ impl<'a> Checker<'a> {
                 runtime_usage: None,
                 synthetic_usage: None,
                 typing_usage: None,
-                range: Range::from_located(expr),
+                range: expr.into(),
                 source: Some(self.ctx.current_stmt().clone()),
                 context: self.ctx.execution_context(),
             },
@@ -4524,7 +4502,7 @@ impl<'a> Checker<'a> {
             pyflakes::rules::UndefinedName {
                 name: id.to_string(),
             },
-            Range::from_located(expr),
+            expr.into(),
         ));
     }
 
@@ -5264,7 +5242,7 @@ impl<'a> Checker<'a> {
 
                 // Extract a `Docstring` from a `Definition`.
                 let expr = definition.docstring.unwrap();
-                let contents = self.locator.slice(Range::from_located(expr));
+                let contents = self.locator.slice(expr.into());
                 let indentation = self.locator.slice(Range::new(
                     Location::new(expr.location.row(), 0),
                     Location::new(expr.location.row(), expr.location.column()),

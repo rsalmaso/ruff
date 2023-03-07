@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustc_hash::FxHashMap;
 use rustpython_parser::ast::{Expr, ExprContext, ExprKind, Stmt, StmtKind};
 
-use crate::ast::types::{Range, RefEquality};
+use crate::ast::types::RefEquality;
 use crate::ast::visitor;
 use crate::ast::visitor::Visitor;
 use crate::checkers::ast::Checker;
@@ -172,9 +172,9 @@ pub fn rewrite_yield_from(checker: &mut Checker, stmt: &Stmt) {
                 continue;
             }
 
-            let mut diagnostic = Diagnostic::new(RewriteYieldFrom, Range::from_located(item.stmt));
+            let mut diagnostic = Diagnostic::new(RewriteYieldFrom, item.stmt.into());
             if checker.patch(diagnostic.kind.rule()) {
-                let contents = checker.locator.slice(Range::from_located(item.iter));
+                let contents = checker.locator.slice(item.iter.into());
                 let contents = format!("yield from {contents}");
                 diagnostic.amend(Fix::replacement(
                     contents,

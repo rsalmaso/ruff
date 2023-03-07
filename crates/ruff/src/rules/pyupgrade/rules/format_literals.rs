@@ -5,7 +5,6 @@ use regex::Regex;
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::Expr;
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::cst::matchers::{match_call, match_expression};
 use crate::fix::Fix;
@@ -86,7 +85,7 @@ fn generate_call(
     locator: &Locator,
     stylist: &Stylist,
 ) -> Result<String> {
-    let module_text = locator.slice(Range::from_located(expr));
+    let module_text = locator.slice(expr.into());
     let mut expression = match_expression(module_text)?;
     let mut call = match_call(&mut expression)?;
 
@@ -139,7 +138,7 @@ pub(crate) fn format_literals(checker: &mut Checker, summary: &FormatSummary, ex
         return;
     }
 
-    let mut diagnostic = Diagnostic::new(FormatLiterals, Range::from_located(expr));
+    let mut diagnostic = Diagnostic::new(FormatLiterals, expr.into());
     if checker.patch(diagnostic.kind.rule()) {
         // Currently, the only issue we know of is in LibCST:
         // https://github.com/Instagram/LibCST/issues/846

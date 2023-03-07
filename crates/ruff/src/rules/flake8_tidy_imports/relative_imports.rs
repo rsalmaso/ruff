@@ -6,7 +6,7 @@ use ruff_macros::{derive_message_formats, violation, CacheKey};
 use ruff_python_stdlib::identifiers::is_module_name;
 
 use crate::ast::helpers::{create_stmt, from_relative_import, unparse_stmt};
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -169,7 +169,7 @@ pub fn banned_relative_import(
             RelativeImports {
                 strictness: strictness.clone(),
             },
-            Range::from_located(stmt),
+            stmt.into(),
         );
         if checker.patch(diagnostic.kind.rule()) {
             if let Some(fix) =

@@ -4,7 +4,7 @@ use rustpython_parser::ast::{Excepthandler, ExcepthandlerKind, Expr, ExprKind};
 use ruff_macros::{derive_message_formats, violation};
 
 use crate::ast::helpers::compose_call_path;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -170,7 +170,7 @@ fn handle_making_changes(
             OSErrorAlias {
                 name: compose_call_path(target),
             },
-            Range::from_located(target),
+            target.into(),
         );
         if checker.patch(diagnostic.kind.rule()) {
             diagnostic.amend(Fix::replacement(

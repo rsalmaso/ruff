@@ -1,7 +1,7 @@
 use ruff_macros::{derive_message_formats, violation};
 
 use crate::ast::strings::{leading_quote, trailing_quote};
-use crate::ast::types::Range;
+
 use crate::ast::whitespace::LinesWithTrailingNewline;
 use crate::checkers::ast::Checker;
 use crate::docstrings::definition::Docstring;
@@ -38,7 +38,7 @@ pub fn one_liner(checker: &mut Checker, docstring: &Docstring) {
     }
 
     if non_empty_line_count == 1 && line_count > 1 {
-        let mut diagnostic = Diagnostic::new(FitsOnOneLine, Range::from_located(docstring.expr));
+        let mut diagnostic = Diagnostic::new(FitsOnOneLine, docstring.expr.into());
         if checker.patch(diagnostic.kind.rule()) {
             if let (Some(leading), Some(trailing)) = (
                 leading_quote(docstring.contents),

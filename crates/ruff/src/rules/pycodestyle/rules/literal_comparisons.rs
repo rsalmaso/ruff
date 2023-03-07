@@ -5,7 +5,7 @@ use rustpython_parser::ast::{Cmpop, Constant, Expr, ExprKind};
 use serde::{Deserialize, Serialize};
 
 use crate::ast::helpers;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -114,16 +114,14 @@ pub fn literal_comparisons(
             )
         {
             if matches!(op, Cmpop::Eq) {
-                let diagnostic =
-                    Diagnostic::new(NoneComparison(op.into()), Range::from_located(comparator));
+                let diagnostic = Diagnostic::new(NoneComparison(op.into()), comparator.into());
                 if checker.patch(diagnostic.kind.rule()) {
                     bad_ops.insert(0, Cmpop::Is);
                 }
                 diagnostics.push(diagnostic);
             }
             if matches!(op, Cmpop::NotEq) {
-                let diagnostic =
-                    Diagnostic::new(NoneComparison(op.into()), Range::from_located(comparator));
+                let diagnostic = Diagnostic::new(NoneComparison(op.into()), comparator.into());
                 if checker.patch(diagnostic.kind.rule()) {
                     bad_ops.insert(0, Cmpop::IsNot);
                 }
@@ -138,20 +136,16 @@ pub fn literal_comparisons(
             } = comparator.node
             {
                 if matches!(op, Cmpop::Eq) {
-                    let diagnostic = Diagnostic::new(
-                        TrueFalseComparison(value, op.into()),
-                        Range::from_located(comparator),
-                    );
+                    let diagnostic =
+                        Diagnostic::new(TrueFalseComparison(value, op.into()), comparator.into());
                     if checker.patch(diagnostic.kind.rule()) {
                         bad_ops.insert(0, Cmpop::Is);
                     }
                     diagnostics.push(diagnostic);
                 }
                 if matches!(op, Cmpop::NotEq) {
-                    let diagnostic = Diagnostic::new(
-                        TrueFalseComparison(value, op.into()),
-                        Range::from_located(comparator),
-                    );
+                    let diagnostic =
+                        Diagnostic::new(TrueFalseComparison(value, op.into()), comparator.into());
                     if checker.patch(diagnostic.kind.rule()) {
                         bad_ops.insert(0, Cmpop::IsNot);
                     }
@@ -178,16 +172,14 @@ pub fn literal_comparisons(
             )
         {
             if matches!(op, Cmpop::Eq) {
-                let diagnostic =
-                    Diagnostic::new(NoneComparison(op.into()), Range::from_located(next));
+                let diagnostic = Diagnostic::new(NoneComparison(op.into()), next.into());
                 if checker.patch(diagnostic.kind.rule()) {
                     bad_ops.insert(idx, Cmpop::Is);
                 }
                 diagnostics.push(diagnostic);
             }
             if matches!(op, Cmpop::NotEq) {
-                let diagnostic =
-                    Diagnostic::new(NoneComparison(op.into()), Range::from_located(next));
+                let diagnostic = Diagnostic::new(NoneComparison(op.into()), next.into());
                 if checker.patch(diagnostic.kind.rule()) {
                     bad_ops.insert(idx, Cmpop::IsNot);
                 }
@@ -202,20 +194,16 @@ pub fn literal_comparisons(
             } = next.node
             {
                 if matches!(op, Cmpop::Eq) {
-                    let diagnostic = Diagnostic::new(
-                        TrueFalseComparison(value, op.into()),
-                        Range::from_located(next),
-                    );
+                    let diagnostic =
+                        Diagnostic::new(TrueFalseComparison(value, op.into()), next.into());
                     if checker.patch(diagnostic.kind.rule()) {
                         bad_ops.insert(idx, Cmpop::Is);
                     }
                     diagnostics.push(diagnostic);
                 }
                 if matches!(op, Cmpop::NotEq) {
-                    let diagnostic = Diagnostic::new(
-                        TrueFalseComparison(value, op.into()),
-                        Range::from_located(next),
-                    );
+                    let diagnostic =
+                        Diagnostic::new(TrueFalseComparison(value, op.into()), next.into());
                     if checker.patch(diagnostic.kind.rule()) {
                         bad_ops.insert(idx, Cmpop::IsNot);
                     }

@@ -2,7 +2,6 @@ use rustpython_parser::ast::{Expr, ExprKind, Stmt, StmtKind};
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::ast::visitor;
 use crate::ast::visitor::Visitor;
 use crate::checkers::ast::Checker;
@@ -135,7 +134,7 @@ fn check_raise(checker: &mut Checker, exc: &Expr, item: &Stmt) {
     if check_raise_type(checker, exc) {
         checker
             .diagnostics
-            .push(Diagnostic::new(PreferTypeError, Range::from_located(item)));
+            .push(Diagnostic::new(PreferTypeError, item.into()));
     }
 }
 

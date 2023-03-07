@@ -4,7 +4,7 @@ use ruff_macros::{derive_message_formats, violation};
 
 use crate::ast::helpers::{is_logger_candidate, SimpleCallArgs};
 use crate::ast::logging::LoggingLevel;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::{Diagnostic, Rule};
 use crate::rules::pyflakes::cformat::CFormatSummary;
@@ -125,10 +125,9 @@ pub fn logging_call(checker: &mut Checker, func: &Expr, args: &[Expr], keywords:
 
                         if checker.settings.rules.enabled(&Rule::LoggingTooManyArgs) {
                             if summary.num_positional < message_args {
-                                checker.diagnostics.push(Diagnostic::new(
-                                    LoggingTooManyArgs,
-                                    Range::from_located(func),
-                                ));
+                                checker
+                                    .diagnostics
+                                    .push(Diagnostic::new(LoggingTooManyArgs, func.into()));
                             }
                         }
 
@@ -137,10 +136,9 @@ pub fn logging_call(checker: &mut Checker, func: &Expr, args: &[Expr], keywords:
                                 && call_args.kwargs.is_empty()
                                 && summary.num_positional > message_args
                             {
-                                checker.diagnostics.push(Diagnostic::new(
-                                    LoggingTooFewArgs,
-                                    Range::from_located(func),
-                                ));
+                                checker
+                                    .diagnostics
+                                    .push(Diagnostic::new(LoggingTooFewArgs, func.into()));
                             }
                         }
                     }

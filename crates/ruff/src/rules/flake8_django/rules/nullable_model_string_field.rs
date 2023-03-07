@@ -3,7 +3,6 @@ use rustpython_parser::ast::{Expr, ExprKind, Stmt, StmtKind};
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -74,7 +73,7 @@ pub fn nullable_model_string_field(checker: &Checker, body: &[Stmt]) -> Vec<Diag
                 NullableModelStringField {
                     field_name: field_name.to_string(),
                 },
-                Range::from_located(value),
+                value.into(),
             ));
         }
     }

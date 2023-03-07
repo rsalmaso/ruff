@@ -3,7 +3,6 @@ use rustpython_parser::ast::{Expr, ExprKind};
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -84,9 +83,8 @@ pub fn prefix_type_params(checker: &mut Checker, value: &Expr, targets: &[Expr])
         }) else {
             return;
         };
-        checker.diagnostics.push(Diagnostic::new(
-            PrefixTypeParams { kind },
-            Range::from_located(value),
-        ));
+        checker
+            .diagnostics
+            .push(Diagnostic::new(PrefixTypeParams { kind }, value.into()));
     }
 }

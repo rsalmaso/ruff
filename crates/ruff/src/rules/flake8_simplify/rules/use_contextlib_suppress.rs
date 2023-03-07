@@ -4,7 +4,7 @@ use ruff_macros::{derive_message_formats, violation};
 
 use crate::ast::helpers;
 use crate::ast::helpers::compose_call_path;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -65,7 +65,7 @@ pub fn use_contextlib_suppress(
             };
             checker.diagnostics.push(Diagnostic::new(
                 UseContextlibSuppress { exception },
-                Range::from_located(stmt),
+                stmt.into(),
             ));
         }
     }

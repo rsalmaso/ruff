@@ -5,7 +5,6 @@ use ruff_macros::{derive_message_formats, violation};
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
-use crate::Range;
 
 /// ## What it does
 /// Checks for usages of comparators other than `<` and `>=` for
@@ -81,7 +80,7 @@ pub fn bad_version_info_comparison(
     }
 
     if !matches!(op, Cmpop::Lt | Cmpop::GtE) {
-        let diagnostic = Diagnostic::new(BadVersionInfoComparison, Range::from_located(expr));
+        let diagnostic = Diagnostic::new(BadVersionInfoComparison, expr.into());
         checker.diagnostics.push(diagnostic);
     }
 }

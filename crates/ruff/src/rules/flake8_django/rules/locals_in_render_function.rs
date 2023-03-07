@@ -2,7 +2,7 @@ use rustpython_parser::ast::{Expr, ExprKind, Keyword};
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::{checkers::ast::Checker, registry::Diagnostic, violation::Violation, Range};
+use crate::{checkers::ast::Checker, registry::Diagnostic, violation::Violation};
 
 /// ## What it does
 /// Checks for the use of `locals()` in `render` functions.
@@ -76,10 +76,9 @@ pub fn locals_in_render_function(
         return;
     };
 
-    checker.diagnostics.push(Diagnostic::new(
-        LocalsInRenderFunction,
-        Range::from_located(locals),
-    ));
+    checker
+        .diagnostics
+        .push(Diagnostic::new(LocalsInRenderFunction, locals.into()));
 }
 
 fn is_locals_call(checker: &Checker, expr: &Expr) -> bool {

@@ -7,7 +7,7 @@ use rustpython_parser::ast::{
 
 use crate::ast::helpers;
 use crate::ast::helpers::unparse_expr;
-use crate::ast::types::{CallPath, Range};
+use crate::ast::types::CallPath;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::{Diagnostic, Rule};
@@ -94,7 +94,7 @@ fn duplicate_handler_exceptions<'a>(
                         .sorted()
                         .collect::<Vec<String>>(),
                 },
-                Range::from_located(expr),
+                expr.into(),
             );
             if checker.patch(diagnostic.kind.rule()) {
                 diagnostic.amend(Fix::replacement(
@@ -156,7 +156,7 @@ pub fn duplicate_exceptions(checker: &mut Checker, handlers: &[Excepthandler]) {
                     DuplicateTryBlockException {
                         name: name.join("."),
                     },
-                    Range::from_located(expr),
+                    expr.into(),
                 ));
             }
         }

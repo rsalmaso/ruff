@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Constant, Expr, ExprKind};
 
 use super::super::helpers::{matches_password_name, string_literal};
-use crate::ast::types::Range;
+
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -52,7 +52,7 @@ pub fn compare_to_hardcoded_password_string(left: &Expr, comparators: &[Expr]) -
                 HardcodedPasswordString {
                     string: string.to_string(),
                 },
-                Range::from_located(comp),
+                comp.into(),
             ))
         })
         .collect()
@@ -67,7 +67,7 @@ pub fn assign_hardcoded_password_string(value: &Expr, targets: &[Expr]) -> Optio
                     HardcodedPasswordString {
                         string: string.to_string(),
                     },
-                    Range::from_located(value),
+                    value.into(),
                 ));
             }
         }

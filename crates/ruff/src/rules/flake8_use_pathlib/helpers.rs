@@ -1,6 +1,5 @@
 use rustpython_parser::ast::Expr;
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::{Diagnostic, DiagnosticKind};
 use crate::rules::flake8_use_pathlib::violations::{
@@ -50,8 +49,7 @@ pub fn replaceable_by_pathlib(checker: &mut Checker, expr: &Expr) {
                 _ => None,
             })
     {
-        let diagnostic =
-            Diagnostic::new::<DiagnosticKind>(diagnostic_kind, Range::from_located(expr));
+        let diagnostic = Diagnostic::new::<DiagnosticKind>(diagnostic_kind, expr.into());
 
         if checker.settings.rules.enabled(diagnostic.kind.rule()) {
             checker.diagnostics.push(diagnostic);

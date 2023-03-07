@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Constant, Expr, ExprKind, Keyword};
 
 use crate::ast::helpers::SimpleCallArgs;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -57,20 +57,20 @@ pub fn jinja2_autoescape_false(
                         if id.as_str() != "select_autoescape" {
                             checker.diagnostics.push(Diagnostic::new(
                                 Jinja2AutoescapeFalse { value: true },
-                                Range::from_located(autoescape_arg),
+                                autoescape_arg.into(),
                             ));
                         }
                     }
                 }
                 _ => checker.diagnostics.push(Diagnostic::new(
                     Jinja2AutoescapeFalse { value: true },
-                    Range::from_located(autoescape_arg),
+                    autoescape_arg.into(),
                 )),
             }
         } else {
             checker.diagnostics.push(Diagnostic::new(
                 Jinja2AutoescapeFalse { value: false },
-                Range::from_located(func),
+                func.into(),
             ));
         }
     }

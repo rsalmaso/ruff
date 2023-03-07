@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, Keyword};
 
 use crate::ast::helpers::SimpleCallArgs;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -34,10 +34,9 @@ pub fn logging_config_insecure_listen(
         let call_args = SimpleCallArgs::new(args, keywords);
 
         if call_args.get_argument("verify", None).is_none() {
-            checker.diagnostics.push(Diagnostic::new(
-                LoggingConfigInsecureListen,
-                Range::from_located(func),
-            ));
+            checker
+                .diagnostics
+                .push(Diagnostic::new(LoggingConfigInsecureListen, func.into()));
         }
     }
 }

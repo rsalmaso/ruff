@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::Keyword;
 
 use super::super::helpers::{matches_password_name, string_literal};
-use crate::ast::types::Range;
+
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -33,7 +33,7 @@ pub fn hardcoded_password_func_arg(keywords: &[Keyword]) -> Vec<Diagnostic> {
                 HardcodedPasswordFuncArg {
                     string: string.to_string(),
                 },
-                Range::from_located(keyword),
+                keyword.into(),
             ))
         })
         .collect()

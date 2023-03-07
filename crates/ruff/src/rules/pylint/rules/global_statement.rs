@@ -3,7 +3,6 @@ use ruff_macros::{derive_message_formats, violation};
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
-use crate::Range;
 
 /// ## What it does
 /// Checks for the use of `global` statements to update identifiers.
@@ -61,12 +60,12 @@ pub fn global_statement(checker: &mut Checker, name: &str) {
                 },
                 // Match Pylint's behavior by reporting on the `global` statement`, rather
                 // than the variable usage.
-                Range::from_located(
-                    binding
-                        .source
-                        .as_ref()
-                        .expect("`global` bindings should always have a `source`"),
-                ),
+                binding
+                    .source
+                    .as_ref()
+                    .expect("`global` bindings should always have a `source`")
+                    .0
+                    .into(),
             );
             checker.diagnostics.push(diagnostic);
         }

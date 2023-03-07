@@ -3,7 +3,7 @@ use rustpython_parser::ast::{Expr, Keyword};
 
 use super::helpers::{is_empty_or_null_string, is_pytest_fail};
 use crate::ast::helpers::SimpleCallArgs;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -25,16 +25,14 @@ pub fn fail_call(checker: &mut Checker, func: &Expr, args: &[Expr], keywords: &[
 
         if let Some(msg) = msg {
             if is_empty_or_null_string(msg) {
-                checker.diagnostics.push(Diagnostic::new(
-                    FailWithoutMessage,
-                    Range::from_located(func),
-                ));
+                checker
+                    .diagnostics
+                    .push(Diagnostic::new(FailWithoutMessage, func.into()));
             }
         } else {
-            checker.diagnostics.push(Diagnostic::new(
-                FailWithoutMessage,
-                Range::from_located(func),
-            ));
+            checker
+                .diagnostics
+                .push(Diagnostic::new(FailWithoutMessage, func.into()));
         }
     }
 }

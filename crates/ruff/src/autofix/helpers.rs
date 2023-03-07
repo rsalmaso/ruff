@@ -8,7 +8,7 @@ use rustpython_parser::{lexer, Mode, Tok};
 
 use crate::ast::helpers;
 use crate::ast::helpers::to_absolute;
-use crate::ast::types::Range;
+
 use crate::ast::whitespace::LinesWithTrailingNewline;
 use crate::cst::helpers::compose_module_path;
 use crate::cst::matchers::match_module;
@@ -227,7 +227,7 @@ pub fn remove_unused_imports<'a>(
     indexer: &Indexer,
     stylist: &Stylist,
 ) -> Result<Fix> {
-    let module_text = locator.slice(Range::from_located(stmt));
+    let module_text = locator.slice(stmt.into());
     let mut tree = match_module(module_text)?;
 
     let Some(Statement::Simple(body)) = tree.body.first_mut() else {

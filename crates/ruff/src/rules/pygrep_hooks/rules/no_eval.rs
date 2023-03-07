@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -28,5 +27,5 @@ pub fn no_eval(checker: &mut Checker, func: &Expr) {
     }
     checker
         .diagnostics
-        .push(Diagnostic::new(NoEval, Range::from_located(func)));
+        .push(Diagnostic::new(NoEval, func.into()));
 }

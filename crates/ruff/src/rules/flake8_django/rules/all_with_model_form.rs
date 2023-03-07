@@ -4,7 +4,7 @@ use ruff_macros::{derive_message_formats, violation};
 
 use crate::rules::flake8_django::rules::helpers::is_model_form;
 use crate::violation::Violation;
-use crate::{checkers::ast::Checker, registry::Diagnostic, Range};
+use crate::{checkers::ast::Checker, registry::Diagnostic};
 
 /// ## What it does
 /// Checks for the use of `fields = "__all__"` in Django `ModelForm`
@@ -75,18 +75,12 @@ pub fn all_with_model_form(checker: &Checker, bases: &[Expr], body: &[Stmt]) -> 
                 match &value {
                     Constant::Str(s) => {
                         if s == "__all__" {
-                            return Some(Diagnostic::new(
-                                AllWithModelForm,
-                                Range::from_located(element),
-                            ));
+                            return Some(Diagnostic::new(AllWithModelForm, element.into()));
                         }
                     }
                     Constant::Bytes(b) => {
                         if b == "__all__".as_bytes() {
-                            return Some(Diagnostic::new(
-                                AllWithModelForm,
-                                Range::from_located(element),
-                            ));
+                            return Some(Diagnostic::new(AllWithModelForm, element.into()));
                         }
                     }
                     _ => (),

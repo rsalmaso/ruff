@@ -1,7 +1,7 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{ArgData, Expr, ExprKind, Stmt, StmtKind};
 
-use crate::ast::types::{Range, ScopeKind};
+use crate::ast::types::ScopeKind;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::rules::pyupgrade::fixes;
@@ -94,7 +94,7 @@ pub fn super_call_with_parameters(checker: &mut Checker, expr: &Expr, func: &Exp
         return;
     }
 
-    let mut diagnostic = Diagnostic::new(SuperCallWithParameters, Range::from_located(expr));
+    let mut diagnostic = Diagnostic::new(SuperCallWithParameters, expr.into());
     if checker.patch(diagnostic.kind.rule()) {
         if let Some(fix) = fixes::remove_super_arguments(checker.locator, checker.stylist, expr) {
             diagnostic.amend(fix);

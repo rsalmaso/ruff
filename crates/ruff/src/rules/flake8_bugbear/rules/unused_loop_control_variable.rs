@@ -23,7 +23,7 @@ use rustc_hash::FxHashMap;
 use rustpython_parser::ast::{Expr, ExprKind, Stmt};
 use serde::{Deserialize, Serialize};
 
-use crate::ast::types::{Range, RefEquality};
+use crate::ast::types::RefEquality;
 use crate::ast::visitor::Visitor;
 use crate::ast::{helpers, visitor};
 use crate::checkers::ast::Checker;
@@ -158,7 +158,7 @@ pub fn unused_loop_control_variable(
                 rename: rename.clone(),
                 certainty,
             },
-            Range::from_located(expr),
+            expr.into(),
         );
         if let Some(rename) = rename {
             if certainty.into() && checker.patch(diagnostic.kind.rule()) {

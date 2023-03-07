@@ -8,7 +8,7 @@ use ruff_macros::{derive_message_formats, violation};
 
 use crate::ast::comparable::ComparableExpr;
 use crate::ast::helpers::unparse_expr;
-use crate::ast::types::{Node, Range};
+use crate::ast::types::Node;
 use crate::ast::visitor;
 use crate::ast::visitor::Visitor;
 use crate::checkers::ast::Checker;
@@ -346,7 +346,7 @@ pub fn redefined_loop_name<'a, 'b>(checker: &'a mut Checker<'b>, node: &Node<'b>
                         outer_kind: outer_assignment_target.binding_kind,
                         inner_kind: inner_assignment_target.binding_kind,
                     },
-                    Range::from_located(inner_assignment_target.expr),
+                    inner_assignment_target.expr.into(),
                 ));
             }
         }

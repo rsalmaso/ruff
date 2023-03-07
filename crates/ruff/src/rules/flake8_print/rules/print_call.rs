@@ -3,7 +3,7 @@ use rustpython_parser::ast::{Expr, Keyword};
 use ruff_macros::{derive_message_formats, violation};
 
 use crate::ast::helpers::is_const_none;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -54,11 +54,11 @@ pub fn print_call(checker: &mut Checker, func: &Expr, keywords: &[Keyword]) {
                     }
                 }
             }
-            Diagnostic::new(PrintFound, Range::from_located(func))
+            Diagnostic::new(PrintFound, func.into())
         } else if call_path.as_ref().map_or(false, |call_path| {
             *call_path.as_slice() == ["pprint", "pprint"]
         }) {
-            Diagnostic::new(PPrintFound, Range::from_located(func))
+            Diagnostic::new(PPrintFound, func.into())
         } else {
             return;
         }

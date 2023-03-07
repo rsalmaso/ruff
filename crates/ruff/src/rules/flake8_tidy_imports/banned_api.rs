@@ -4,7 +4,7 @@ use rustpython_parser::ast::{Alias, Expr, Located};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-use crate::ast::types::{CallPath, Range};
+use crate::ast::types::CallPath;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -62,7 +62,7 @@ pub fn name_is_banned(
                 name: full_name,
                 message: ban.msg.to_string(),
             },
-            Range::from_located(name),
+            name.into(),
         ));
     }
     None
@@ -82,7 +82,7 @@ pub fn name_or_parent_is_banned<T>(
                     name: name.to_string(),
                     message: ban.msg.to_string(),
                 },
-                Range::from_located(located),
+                located.into(),
             ));
         }
         match name.rfind('.') {
@@ -109,7 +109,7 @@ pub fn banned_attribute_access(checker: &mut Checker, expr: &Expr) {
                 name: banned_path.to_string(),
                 message: ban.msg.to_string(),
             },
-            Range::from_located(expr),
+            expr.into(),
         ));
     }
 }

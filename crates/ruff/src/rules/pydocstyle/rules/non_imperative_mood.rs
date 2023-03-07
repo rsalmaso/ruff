@@ -6,7 +6,7 @@ use ruff_macros::{derive_message_formats, violation};
 
 use crate::ast::cast;
 use crate::ast::helpers::to_call_path;
-use crate::ast::types::{CallPath, Range};
+use crate::ast::types::CallPath;
 use crate::ast::visibility::{is_property, is_test};
 use crate::checkers::ast::Checker;
 use crate::docstrings::definition::{DefinitionKind, Docstring};
@@ -61,10 +61,8 @@ pub fn non_imperative_mood(
         return;
     }
     if let Some(false) = MOOD.is_imperative(&first_word_norm) {
-        let diagnostic = Diagnostic::new(
-            NonImperativeMood(line.to_string()),
-            Range::from_located(docstring.expr),
-        );
+        let diagnostic =
+            Diagnostic::new(NonImperativeMood(line.to_string()), docstring.expr.into());
         checker.diagnostics.push(diagnostic);
     }
 }

@@ -3,7 +3,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind};
 
 use super::helpers;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::rules::flake8_comprehensions::fixes;
@@ -34,7 +34,7 @@ pub fn unnecessary_list_call(checker: &mut Checker, expr: &Expr, func: &Expr, ar
     if !matches!(argument, ExprKind::ListComp { .. }) {
         return;
     }
-    let mut diagnostic = Diagnostic::new(UnnecessaryListCall, Range::from_located(expr));
+    let mut diagnostic = Diagnostic::new(UnnecessaryListCall, expr.into());
     if checker.patch(diagnostic.kind.rule()) {
         match fixes::fix_unnecessary_list_call(checker.locator, checker.stylist, expr) {
             Ok(fix) => {

@@ -1,6 +1,5 @@
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::docstrings::definition::Docstring;
 use crate::registry::{Diagnostic, Rule};
@@ -23,10 +22,9 @@ pub fn not_empty(checker: &mut Checker, docstring: &Docstring) -> bool {
     }
 
     if checker.settings.rules.enabled(&Rule::EmptyDocstring) {
-        checker.diagnostics.push(Diagnostic::new(
-            EmptyDocstring,
-            Range::from_located(docstring.expr),
-        ));
+        checker
+            .diagnostics
+            .push(Diagnostic::new(EmptyDocstring, docstring.expr.into()));
     }
     false
 }

@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Constant, Expr, ExprContext, ExprKind, Unaryop};
 
 use crate::ast::helpers::{create_expr, unparse_expr};
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -97,7 +97,7 @@ pub fn explicit_true_false_in_ifexpr(
         IfExprWithTrueFalse {
             expr: unparse_expr(test, checker.stylist),
         },
-        Range::from_located(expr),
+        expr.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         if matches!(test.node, ExprKind::Compare { .. }) {
@@ -152,7 +152,7 @@ pub fn explicit_false_true_in_ifexpr(
         IfExprWithFalseTrue {
             expr: unparse_expr(test, checker.stylist),
         },
-        Range::from_located(expr),
+        expr.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(
@@ -201,7 +201,7 @@ pub fn twisted_arms_in_ifexpr(
             expr_body: unparse_expr(body, checker.stylist),
             expr_else: unparse_expr(orelse, checker.stylist),
         },
-        Range::from_located(expr),
+        expr.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(

@@ -20,7 +20,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind, Unaryop};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -46,8 +45,7 @@ pub fn unary_prefix_increment(checker: &mut Checker, expr: &Expr, op: &Unaryop, 
     if !matches!(op, Unaryop::UAdd) {
         return;
     }
-    checker.diagnostics.push(Diagnostic::new(
-        UnaryPrefixIncrement,
-        Range::from_located(expr),
-    ));
+    checker
+        .diagnostics
+        .push(Diagnostic::new(UnaryPrefixIncrement, expr.into()));
 }

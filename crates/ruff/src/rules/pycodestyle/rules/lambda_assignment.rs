@@ -47,7 +47,7 @@ pub fn lambda_assignment(checker: &mut Checker, target: &Expr, value: &Expr, stm
                     name: id.to_string(),
                     fixable,
                 },
-                Range::from_located(stmt),
+                stmt.into(),
             );
 
             if checker.patch(diagnostic.kind.rule())

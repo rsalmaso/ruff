@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::Expr;
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -68,7 +67,7 @@ pub fn deprecated_type_alias(checker: &mut Checker, expr: &Expr) {
             NumpyDeprecatedTypeAlias {
                 type_name: type_name.to_string(),
             },
-            Range::from_located(expr),
+            expr.into(),
         );
         if checker.patch(diagnostic.kind.rule()) {
             diagnostic.amend(Fix::replacement(

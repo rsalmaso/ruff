@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Constant, Expr, ExprKind};
 
 use crate::ast::helpers::{create_expr, unparse_expr};
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -66,7 +66,7 @@ pub fn use_capital_environment_variables(checker: &mut Checker, expr: &Expr) {
             expected: capital_env_var.clone(),
             original: env_var.clone(),
         },
-        Range::from_located(arg),
+        arg.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         let new_env_var = create_expr(ExprKind::Constant {
@@ -108,7 +108,7 @@ fn check_os_environ_subscript(checker: &mut Checker, expr: &Expr) {
             expected: capital_env_var.clone(),
             original: env_var.clone(),
         },
-        Range::from_located(slice),
+        slice.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         let new_env_var = create_expr(ExprKind::Constant {

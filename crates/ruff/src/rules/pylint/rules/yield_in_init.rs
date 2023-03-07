@@ -3,9 +3,7 @@ use rustpython_parser::ast::Expr;
 use ruff_macros::{derive_message_formats, violation};
 
 use crate::rules::pylint::helpers::in_dunder_init;
-use crate::{
-    ast::types::Range, checkers::ast::Checker, registry::Diagnostic, violation::Violation,
-};
+use crate::{checkers::ast::Checker, registry::Diagnostic, violation::Violation};
 
 /// ## What it does
 /// Checks for `__init__` methods that are turned into generators by the
@@ -43,6 +41,6 @@ pub fn yield_in_init(checker: &mut Checker, expr: &Expr) {
     if in_dunder_init(checker) {
         checker
             .diagnostics
-            .push(Diagnostic::new(YieldInInit, Range::from_located(expr)));
+            .push(Diagnostic::new(YieldInInit, expr.into()));
     }
 }

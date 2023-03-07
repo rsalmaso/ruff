@@ -2,7 +2,6 @@ use rustpython_parser::ast::{Expr, ExprKind, Stmt};
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -48,19 +47,17 @@ pub fn unintentional_type_annotation(
     match &target.node {
         ExprKind::Subscript { value, .. } => {
             if matches!(&value.node, ExprKind::Name { .. }) {
-                checker.diagnostics.push(Diagnostic::new(
-                    UnintentionalTypeAnnotation,
-                    Range::from_located(stmt),
-                ));
+                checker
+                    .diagnostics
+                    .push(Diagnostic::new(UnintentionalTypeAnnotation, stmt.into()));
             }
         }
         ExprKind::Attribute { value, .. } => {
             if let ExprKind::Name { id, .. } = &value.node {
                 if id != "self" {
-                    checker.diagnostics.push(Diagnostic::new(
-                        UnintentionalTypeAnnotation,
-                        Range::from_located(stmt),
-                    ));
+                    checker
+                        .diagnostics
+                        .push(Diagnostic::new(UnintentionalTypeAnnotation, stmt.into()));
                 }
             }
         }

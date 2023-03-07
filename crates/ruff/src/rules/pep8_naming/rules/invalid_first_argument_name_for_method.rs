@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Arguments, Expr};
 
 use crate::ast::function_type;
-use crate::ast::types::{Range, Scope};
+use crate::ast::types::Scope;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -87,6 +87,6 @@ pub fn invalid_first_argument_name_for_method(
     }
     Some(Diagnostic::new(
         InvalidFirstArgumentNameForMethod,
-        Range::from_located(arg),
+        arg.into(),
     ))
 }

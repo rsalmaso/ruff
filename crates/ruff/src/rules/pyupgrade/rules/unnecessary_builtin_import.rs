@@ -3,7 +3,6 @@ use log::error;
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Alias, AliasData, Located, Stmt};
 
-use crate::ast::types::Range;
 use crate::autofix;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
@@ -100,7 +99,7 @@ pub fn unnecessary_builtin_import(
                 .sorted()
                 .collect(),
         },
-        Range::from_located(stmt),
+        stmt.into(),
     );
 
     if checker.patch(diagnostic.kind.rule()) {

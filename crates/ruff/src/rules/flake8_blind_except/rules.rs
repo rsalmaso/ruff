@@ -3,7 +3,7 @@ use rustpython_parser::ast::{Expr, ExprKind, Stmt, StmtKind};
 
 use crate::ast::helpers;
 use crate::ast::helpers::{find_keyword, is_const_true};
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -84,7 +84,7 @@ pub fn blind_except(
                 BlindExcept {
                     name: id.to_string(),
                 },
-                Range::from_located(type_),
+                type_.into(),
             ));
         }
     }

@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Located, Stmt, StmtKind};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -22,9 +21,9 @@ impl AlwaysAutofixableViolation for RewriteCElementTree {
 }
 
 fn add_check_for_node<T>(checker: &mut Checker, node: &Located<T>) {
-    let mut diagnostic = Diagnostic::new(RewriteCElementTree, Range::from_located(node));
+    let mut diagnostic = Diagnostic::new(RewriteCElementTree, node.into());
     if checker.patch(diagnostic.kind.rule()) {
-        let contents = checker.locator.slice(Range::from_located(node));
+        let contents = checker.locator.slice(node.into());
         diagnostic.amend(Fix::replacement(
             contents.replacen("cElementTree", "ElementTree", 1),
             node.location,

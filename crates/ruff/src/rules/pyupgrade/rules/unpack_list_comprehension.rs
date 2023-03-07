@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -94,10 +93,9 @@ pub fn unpack_list_comprehension(checker: &mut Checker, targets: &[Expr], value:
                 return;
             }
 
-            let mut diagnostic =
-                Diagnostic::new(RewriteListComprehension, Range::from_located(value));
+            let mut diagnostic = Diagnostic::new(RewriteListComprehension, value.into());
             if checker.patch(diagnostic.kind.rule()) {
-                let existing = checker.locator.slice(Range::from_located(value));
+                let existing = checker.locator.slice(value.into());
 
                 let mut content = String::with_capacity(existing.len());
                 content.push('(');

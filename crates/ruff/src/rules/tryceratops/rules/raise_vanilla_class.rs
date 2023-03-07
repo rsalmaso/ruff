@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -72,9 +71,8 @@ pub fn raise_vanilla_class(checker: &mut Checker, expr: &Expr) {
         })
         .map_or(false, |call_path| call_path.as_slice() == ["", "Exception"])
     {
-        checker.diagnostics.push(Diagnostic::new(
-            RaiseVanillaClass,
-            Range::from_located(expr),
-        ));
+        checker
+            .diagnostics
+            .push(Diagnostic::new(RaiseVanillaClass, expr.into()));
     }
 }

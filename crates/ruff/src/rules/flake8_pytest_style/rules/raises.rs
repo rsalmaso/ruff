@@ -3,7 +3,7 @@ use rustpython_parser::ast::{Expr, ExprKind, Keyword, Stmt, StmtKind, Withitem};
 
 use super::helpers::is_empty_or_null_string;
 use crate::ast::helpers::{format_call_path, to_call_path};
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::{Diagnostic, Rule};
 use crate::violation::Violation;
@@ -71,10 +71,9 @@ pub fn raises_call(checker: &mut Checker, func: &Expr, args: &[Expr], keywords: 
             .enabled(&Rule::RaisesWithoutException)
         {
             if args.is_empty() && keywords.is_empty() {
-                checker.diagnostics.push(Diagnostic::new(
-                    RaisesWithoutException,
-                    Range::from_located(func),
-                ));
+                checker
+                    .diagnostics
+                    .push(Diagnostic::new(RaisesWithoutException, func.into()));
             }
         }
 
@@ -129,10 +128,9 @@ pub fn complex_raises(checker: &mut Checker, stmt: &Stmt, items: &[Withitem], bo
         }
 
         if is_too_complex {
-            checker.diagnostics.push(Diagnostic::new(
-                RaisesWithMultipleStatements,
-                Range::from_located(stmt),
-            ));
+            checker
+                .diagnostics
+                .push(Diagnostic::new(RaisesWithMultipleStatements, stmt.into()));
         }
     }
 }
@@ -166,7 +164,7 @@ fn exception_needs_match(checker: &mut Checker, exception: &Expr) {
             RaisesTooBroad {
                 exception: call_path,
             },
-            Range::from_located(exception),
+            exception.into(),
         ));
     }
 }

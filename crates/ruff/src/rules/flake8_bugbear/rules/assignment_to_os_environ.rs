@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -33,8 +32,7 @@ pub fn assignment_to_os_environ(checker: &mut Checker, targets: &[Expr]) {
     if id != "os" {
         return;
     }
-    checker.diagnostics.push(Diagnostic::new(
-        AssignmentToOsEnviron,
-        Range::from_located(target),
-    ));
+    checker
+        .diagnostics
+        .push(Diagnostic::new(AssignmentToOsEnviron, target.into()));
 }

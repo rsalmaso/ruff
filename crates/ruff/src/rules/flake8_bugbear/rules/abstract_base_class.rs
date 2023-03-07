@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Constant, Expr, ExprKind, Keyword, Stmt, StmtKind};
 
-use crate::ast::types::Range;
 use crate::ast::visibility::{is_abstract, is_overload};
 use crate::checkers::ast::Checker;
 use crate::registry::{Diagnostic, Rule};
@@ -127,7 +126,7 @@ pub fn abstract_base_class(
                 EmptyMethodWithoutAbstractDecorator {
                     name: format!("{name}.{method_name}"),
                 },
-                Range::from_located(stmt),
+                stmt.into(),
             ));
         }
     }
@@ -141,7 +140,7 @@ pub fn abstract_base_class(
                 AbstractBaseClassWithoutAbstractMethod {
                     name: name.to_string(),
                 },
-                Range::from_located(stmt),
+                stmt.into(),
             ));
         }
     }

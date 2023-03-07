@@ -2,7 +2,6 @@ use rustpython_parser::ast::Expr;
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -19,10 +18,9 @@ impl Violation for DocstringInStub {
 
 /// PYI021
 pub fn docstring_in_stubs(checker: &mut Checker, docstring: Option<&Expr>) {
-    if let Some(docstr) = &docstring {
-        checker.diagnostics.push(Diagnostic::new(
-            DocstringInStub,
-            Range::from_located(docstr),
-        ));
+    if let Some(expr) = &docstring {
+        checker
+            .diagnostics
+            .push(Diagnostic::new(DocstringInStub, (*expr).into()));
     }
 }

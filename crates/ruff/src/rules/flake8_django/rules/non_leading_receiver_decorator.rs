@@ -2,7 +2,7 @@ use rustpython_parser::ast::{Expr, ExprKind};
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::{CallPath, Range};
+use crate::ast::types::CallPath;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -69,7 +69,7 @@ where
         if i > 0 && is_receiver && !seen_receiver {
             diagnostics.push(Diagnostic::new(
                 NonLeadingReceiverDecorator,
-                Range::from_located(decorator),
+                decorator.into(),
             ));
         }
         if !is_receiver && seen_receiver {

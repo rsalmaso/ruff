@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -23,5 +22,5 @@ pub fn exec_used(expr: &Expr, func: &Expr) -> Option<Diagnostic> {
     if id != "exec" {
         return None;
     }
-    Some(Diagnostic::new(ExecBuiltin, Range::from_located(expr)))
+    Some(Diagnostic::new(ExecBuiltin, expr.into()))
 }

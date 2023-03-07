@@ -3,7 +3,7 @@ use rustc_hash::FxHashSet;
 use rustpython_parser::ast::{Expr, ExprKind, Keyword};
 
 use crate::ast::helpers::{collect_arg_names, compose_call_path, SimpleCallArgs};
-use crate::ast::types::Range;
+
 use crate::ast::visitor;
 use crate::ast::visitor::Visitor;
 use crate::registry::Diagnostic;
@@ -83,7 +83,7 @@ fn check_patch_call(
             visitor.visit_expr(body);
 
             if !visitor.uses_args {
-                return Some(Diagnostic::new(PatchWithLambda, Range::from_located(call)));
+                return Some(Diagnostic::new(PatchWithLambda, call.into()));
             }
         }
     }

@@ -73,7 +73,7 @@ where
                             name: compose_call_path(func),
                         }
                         .into(),
-                        Range::from_located(expr),
+                        expr.into(),
                     ));
                 }
                 visitor::walk_expr(self, expr);

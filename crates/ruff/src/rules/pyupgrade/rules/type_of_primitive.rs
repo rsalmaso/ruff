@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind};
 
 use super::super::types::Primitive;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -44,7 +44,7 @@ pub fn type_of_primitive(checker: &mut Checker, expr: &Expr, func: &Expr, args: 
     let Some(primitive) = Primitive::from_constant(value) else {
         return;
     };
-    let mut diagnostic = Diagnostic::new(TypeOfPrimitive { primitive }, Range::from_located(expr));
+    let mut diagnostic = Diagnostic::new(TypeOfPrimitive { primitive }, expr.into());
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(
             primitive.builtin(),

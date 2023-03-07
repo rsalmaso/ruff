@@ -3,13 +3,13 @@ use rustpython_parser::{lexer, Mode, Tok};
 
 use super::types::TrailingComma;
 use crate::ast::helpers::is_docstring_stmt;
-use crate::ast::types::Range;
+
 use crate::source_code::Locator;
 
 /// Return `true` if a `StmtKind::ImportFrom` statement ends with a magic
 /// trailing comma.
 pub fn trailing_comma(stmt: &Stmt, locator: &Locator) -> TrailingComma {
-    let contents = locator.slice(Range::from_located(stmt));
+    let contents = locator.slice(stmt.into());
     let mut count: usize = 0;
     let mut trailing_comma = TrailingComma::Absent;
     for (_, tok, _) in lexer::lex_located(contents, Mode::Module, stmt.location).flatten() {

@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::Stmt;
 
-use crate::ast::types::Range;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -24,10 +23,7 @@ pub fn import(import_from: &Stmt, name: &str, asname: Option<&str>) -> Option<Di
     if is_pytest_or_subpackage(name) {
         if let Some(alias) = asname {
             if alias != name {
-                return Some(Diagnostic::new(
-                    IncorrectPytestImport,
-                    Range::from_located(import_from),
-                ));
+                return Some(Diagnostic::new(IncorrectPytestImport, import_from.into()));
             }
         }
     }
@@ -49,10 +45,7 @@ pub fn import_from(
 
     if let Some(module) = module {
         if is_pytest_or_subpackage(module) {
-            return Some(Diagnostic::new(
-                IncorrectPytestImport,
-                Range::from_located(import_from),
-            ));
+            return Some(Diagnostic::new(IncorrectPytestImport, import_from.into()));
         }
     };
 

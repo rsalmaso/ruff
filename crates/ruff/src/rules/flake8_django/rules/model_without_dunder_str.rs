@@ -3,7 +3,6 @@ use rustpython_parser::ast::{ExprKind, Stmt};
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -64,7 +63,7 @@ pub fn model_without_dunder_str(
     if !has_dunder_method(body) {
         return Some(Diagnostic::new(
             ModelWithoutDunderStr,
-            Range::from_located(class_location),
+            class_location.into(),
         ));
     }
     None

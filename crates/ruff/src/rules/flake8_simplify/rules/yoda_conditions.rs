@@ -5,7 +5,6 @@ use rustpython_parser::ast::{Cmpop, Expr, ExprKind, Unaryop};
 use ruff_macros::{derive_message_formats, violation};
 use ruff_python_stdlib::str::{self};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::cst::matchers::{match_comparison, match_expression};
 use crate::fix::Fix;
@@ -61,7 +60,7 @@ fn is_constant_like(expr: &Expr) -> bool {
 
 /// Generate a fix to reverse a comparison.
 fn reverse_comparison(expr: &Expr, locator: &Locator, stylist: &Stylist) -> Result<String> {
-    let range = Range::from_located(expr);
+    let range = expr.into();
     let contents = locator.slice(range);
 
     let mut expression = match_expression(contents)?;
@@ -160,7 +159,7 @@ pub fn yoda_conditions(
             YodaConditions {
                 suggestion: Some(suggestion.to_string()),
             },
-            Range::from_located(expr),
+            expr.into(),
         );
         if checker.patch(diagnostic.kind.rule()) {
             diagnostic.amend(Fix::replacement(
@@ -173,7 +172,7 @@ pub fn yoda_conditions(
     } else {
         checker.diagnostics.push(Diagnostic::new(
             YodaConditions { suggestion: None },
-            Range::from_located(expr),
+            expr.into(),
         ));
     }
 }

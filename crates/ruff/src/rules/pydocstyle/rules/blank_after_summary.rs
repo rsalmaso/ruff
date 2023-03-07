@@ -1,6 +1,5 @@
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::docstrings::definition::Docstring;
 use crate::fix::Fix;
@@ -59,7 +58,7 @@ pub fn blank_after_summary(checker: &mut Checker, docstring: &Docstring) {
             BlankLineAfterSummary {
                 num_lines: blanks_count,
             },
-            Range::from_located(docstring.expr),
+            docstring.expr.into(),
         );
         if checker.patch(diagnostic.kind.rule()) {
             if blanks_count > 1 {

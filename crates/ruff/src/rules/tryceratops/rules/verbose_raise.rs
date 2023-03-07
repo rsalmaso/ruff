@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Excepthandler, ExcepthandlerKind, Expr, ExprKind, Stmt, StmtKind};
 
-use crate::ast::types::Range;
 use crate::ast::visitor;
 use crate::ast::visitor::Visitor;
 use crate::checkers::ast::Checker;
@@ -72,7 +71,7 @@ pub fn verbose_raise(checker: &mut Checker, handlers: &[Excepthandler]) {
                         if id == exception_name {
                             checker
                                 .diagnostics
-                                .push(Diagnostic::new(VerboseRaise, Range::from_located(exc)));
+                                .push(Diagnostic::new(VerboseRaise, exc.into()));
                         }
                     }
                 }

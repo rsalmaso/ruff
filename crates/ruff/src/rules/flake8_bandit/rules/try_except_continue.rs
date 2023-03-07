@@ -2,7 +2,6 @@ use rustpython_parser::ast::{Excepthandler, Expr, Stmt, StmtKind};
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::rules::flake8_bandit::helpers::is_untyped_exception;
@@ -31,9 +30,8 @@ pub fn try_except_continue(
         && body[0].node == StmtKind::Continue
         && (check_typed_exception || is_untyped_exception(type_, checker))
     {
-        checker.diagnostics.push(Diagnostic::new(
-            TryExceptContinue,
-            Range::from_located(excepthandler),
-        ));
+        checker
+            .diagnostics
+            .push(Diagnostic::new(TryExceptContinue, excepthandler.into()));
     }
 }

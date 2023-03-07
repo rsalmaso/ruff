@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -27,8 +26,5 @@ pub fn assignment_to_df(targets: &[Expr]) -> Option<Diagnostic> {
     if id != "df" {
         return None;
     }
-    Some(Diagnostic::new(
-        DfIsABadVariableName,
-        Range::from_located(target),
-    ))
+    Some(Diagnostic::new(DfIsABadVariableName, target.into()))
 }

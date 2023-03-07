@@ -2,7 +2,6 @@ use ruff_macros::{derive_message_formats, violation};
 use rustc_hash::FxHashMap;
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::ast::visitor;
 use crate::ast::visitor::Visitor;
 use crate::checkers::ast::Checker;
@@ -74,7 +73,7 @@ pub fn loop_variable_overrides_iterator(checker: &mut Checker, target: &Expr, it
                 LoopVariableOverridesIterator {
                     name: name.to_string(),
                 },
-                Range::from_located(expr),
+                expr.into(),
             ));
         }
     }

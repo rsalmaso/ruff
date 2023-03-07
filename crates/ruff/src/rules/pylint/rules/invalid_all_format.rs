@@ -2,7 +2,6 @@ use rustpython_parser::ast::Expr;
 
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -18,5 +17,5 @@ impl Violation for InvalidAllFormat {
 
 /// PLE0605
 pub fn invalid_all_format(expr: &Expr) -> Diagnostic {
-    Diagnostic::new(InvalidAllFormat, Range::from_located(expr))
+    Diagnostic::new(InvalidAllFormat, expr.into())
 }

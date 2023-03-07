@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Cmpop, Expr, ExprKind, Stmt, StmtKind, Unaryop};
 
 use crate::ast::helpers::{create_expr, unparse_expr};
-use crate::ast::types::{Range, ScopeKind};
+use crate::ast::types::ScopeKind;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -104,7 +104,7 @@ pub fn negation_with_equal_op(checker: &mut Checker, expr: &Expr, op: &Unaryop, 
             left: unparse_expr(left, checker.stylist),
             right: unparse_expr(&comparators[0], checker.stylist),
         },
-        Range::from_located(expr),
+        expr.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(
@@ -155,7 +155,7 @@ pub fn negation_with_not_equal_op(
             left: unparse_expr(left, checker.stylist),
             right: unparse_expr(&comparators[0], checker.stylist),
         },
-        Range::from_located(expr),
+        expr.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(
@@ -190,7 +190,7 @@ pub fn double_negation(checker: &mut Checker, expr: &Expr, op: &Unaryop, operand
         DoubleNegation {
             expr: unparse_expr(operand, checker.stylist),
         },
-        Range::from_located(expr),
+        expr.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(

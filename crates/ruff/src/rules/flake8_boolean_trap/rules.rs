@@ -3,7 +3,7 @@ use rustpython_parser::ast::{Arguments, Constant, Expr, ExprKind};
 use ruff_macros::{derive_message_formats, violation};
 
 use crate::ast::helpers::collect_call_path;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::{Diagnostic, DiagnosticKind};
 use crate::violation::Violation;
@@ -90,9 +90,7 @@ const fn is_boolean_arg(arg: &Expr) -> bool {
 
 fn add_if_boolean(checker: &mut Checker, arg: &Expr, kind: DiagnosticKind) {
     if is_boolean_arg(arg) {
-        checker
-            .diagnostics
-            .push(Diagnostic::new(kind, Range::from_located(arg)));
+        checker.diagnostics.push(Diagnostic::new(kind, arg.into()));
     }
 }
 
@@ -135,7 +133,7 @@ pub fn check_positional_boolean_in_def(
         }
         checker.diagnostics.push(Diagnostic::new(
             BooleanPositionalArgInFunctionDefinition,
-            Range::from_located(arg),
+            arg.into(),
         ));
     }
 }

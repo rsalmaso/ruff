@@ -5,7 +5,7 @@ use rustpython_parser::ast::{Boolop, Expr, ExprKind};
 
 use crate::ast::hashable::HashableExpr;
 use crate::ast::helpers::unparse_expr;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -68,7 +68,7 @@ pub fn merge_isinstance(checker: &mut Checker, expr: &Expr, op: &Boolop, values:
                         .sorted()
                         .collect(),
                 },
-                Range::from_located(expr),
+                expr.into(),
             ));
         }
     }

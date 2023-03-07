@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Stmt, StmtKind};
 
-use crate::ast::types::Range;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -45,9 +44,6 @@ pub fn continue_outside_loop<'a>(
     if allowed {
         None
     } else {
-        Some(Diagnostic::new(
-            ContinueOutsideLoop,
-            Range::from_located(stmt),
-        ))
+        Some(Diagnostic::new(ContinueOutsideLoop, stmt.into()))
     }
 }

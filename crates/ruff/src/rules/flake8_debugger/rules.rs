@@ -3,7 +3,7 @@ use rustpython_parser::ast::{Expr, Stmt};
 
 use super::types::DebuggerUsingType;
 use crate::ast::helpers::format_call_path;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -55,7 +55,7 @@ pub fn debugger_call(checker: &mut Checker, expr: &Expr, func: &Expr) {
             Debugger {
                 using_type: DebuggerUsingType::Call(format_call_path(target)),
             },
-            Range::from_located(expr),
+            expr.into(),
         ));
     }
 }
@@ -76,7 +76,7 @@ pub fn debugger_import(stmt: &Stmt, module: Option<&str>, name: &str) -> Option<
                 Debugger {
                     using_type: DebuggerUsingType::Import(format_call_path(&call_path)),
                 },
-                Range::from_located(stmt),
+                stmt.into(),
             ));
         }
     } else {
@@ -89,7 +89,7 @@ pub fn debugger_import(stmt: &Stmt, module: Option<&str>, name: &str) -> Option<
                 Debugger {
                     using_type: DebuggerUsingType::Import(name.to_string()),
                 },
-                Range::from_located(stmt),
+                stmt.into(),
             ));
         }
     }

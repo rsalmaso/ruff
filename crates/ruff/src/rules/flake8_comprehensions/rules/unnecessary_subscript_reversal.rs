@@ -3,7 +3,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Constant, Expr, ExprKind, Unaryop};
 
 use super::helpers;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -71,6 +71,6 @@ pub fn unnecessary_subscript_reversal(
         UnnecessarySubscriptReversal {
             func: id.to_string(),
         },
-        Range::from_located(expr),
+        expr.into(),
     ));
 }

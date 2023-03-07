@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::Expr;
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -41,7 +40,7 @@ pub fn use_pep585_annotation(checker: &mut Checker, expr: &Expr) {
             DeprecatedCollectionType {
                 name: binding.to_string(),
             },
-            Range::from_located(expr),
+            expr.into(),
         );
         if checker.patch(diagnostic.kind.rule()) {
             let binding = binding.to_lowercase();

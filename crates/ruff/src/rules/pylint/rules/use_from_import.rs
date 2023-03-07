@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Alias, AliasData, Located, Stmt, StmtKind};
 
 use crate::ast::helpers::{create_stmt, unparse_stmt};
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -51,7 +51,7 @@ pub fn use_from_import(checker: &mut Checker, stmt: &Stmt, alias: &Alias, names:
             name: name.to_string(),
             fixable,
         },
-        Range::from_located(alias),
+        alias.into(),
     );
     if fixable && checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(

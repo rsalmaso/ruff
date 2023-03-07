@@ -163,7 +163,7 @@ where
                             AssertInExcept {
                                 name: id.to_string(),
                             },
-                            Range::from_located(current_assert),
+                            current_assert.into(),
                         ));
                     }
                 }
@@ -197,13 +197,13 @@ pub fn unittest_assertion(
                 // the assertion is part of a larger expression.
                 let fixable = checker.ctx.current_expr_parent().is_none()
                     && matches!(checker.ctx.current_stmt().node, StmtKind::Expr { .. })
-                    && !has_comments_in(Range::from_located(expr), checker.locator);
+                    && !has_comments_in(expr.into(), checker.locator);
                 let mut diagnostic = Diagnostic::new(
                     UnittestAssertion {
                         assertion: unittest_assert.to_string(),
                         fixable,
                     },
-                    Range::from_located(func),
+                    func.into(),
                 );
                 if fixable && checker.patch(diagnostic.kind.rule()) {
                     if let Ok(stmt) = unittest_assert.generate_assert(args, keywords) {
@@ -226,10 +226,7 @@ pub fn unittest_assertion(
 /// PT015
 pub fn assert_falsy(stmt: &Stmt, test: &Expr) -> Option<Diagnostic> {
     if is_falsy_constant(test) {
-        Some(Diagnostic::new(
-            AssertAlwaysFalse,
-            Range::from_located(stmt),
-        ))
+        Some(Diagnostic::new(AssertAlwaysFalse, stmt.into()))
     } else {
         None
     }
@@ -435,9 +432,8 @@ pub fn composite_condition(checker: &mut Checker, stmt: &Stmt, test: &Expr, msg:
     if matches!(composite, CompositionKind::Simple | CompositionKind::Mixed) {
         let fixable = matches!(composite, CompositionKind::Simple)
             && msg.is_none()
-            && !has_comments_in(Range::from_located(stmt), checker.locator);
-        let mut diagnostic =
-            Diagnostic::new(CompositeAssertion { fixable }, Range::from_located(stmt));
+            && !has_comments_in(stmt.into(), checker.locator);
+        let mut diagnostic = Diagnostic::new(CompositeAssertion { fixable }, stmt.into());
         if fixable && checker.patch(diagnostic.kind.rule()) {
             if let Ok(fix) = fix_composite_condition(stmt, checker.locator, checker.stylist) {
                 diagnostic.amend(fix);

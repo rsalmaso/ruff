@@ -1,6 +1,5 @@
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::docstrings::definition::Docstring;
 use crate::registry::Diagnostic;
@@ -34,6 +33,6 @@ pub fn starts_with_this(checker: &mut Checker, docstring: &Docstring) {
     }
     checker.diagnostics.push(Diagnostic::new(
         DocstringStartsWithThis,
-        Range::from_located(docstring.expr),
+        docstring.expr.into(),
     ));
 }

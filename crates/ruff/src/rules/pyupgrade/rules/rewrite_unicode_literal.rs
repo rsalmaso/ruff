@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, Location};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -25,7 +24,7 @@ impl AlwaysAutofixableViolation for RewriteUnicodeLiteral {
 pub fn rewrite_unicode_literal(checker: &mut Checker, expr: &Expr, kind: Option<&str>) {
     if let Some(const_kind) = kind {
         if const_kind.to_lowercase() == "u" {
-            let mut diagnostic = Diagnostic::new(RewriteUnicodeLiteral, Range::from_located(expr));
+            let mut diagnostic = Diagnostic::new(RewriteUnicodeLiteral, expr.into());
             if checker.patch(diagnostic.kind.rule()) {
                 diagnostic.amend(Fix::deletion(
                     expr.location,

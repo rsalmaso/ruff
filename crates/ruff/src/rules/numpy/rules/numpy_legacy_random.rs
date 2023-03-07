@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::Expr;
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -122,7 +121,7 @@ pub fn numpy_legacy_random(checker: &mut Checker, expr: &Expr) {
             NumpyLegacyRandom {
                 method_name: method_name.to_string(),
             },
-            Range::from_located(expr),
+            expr.into(),
         ));
     }
 }

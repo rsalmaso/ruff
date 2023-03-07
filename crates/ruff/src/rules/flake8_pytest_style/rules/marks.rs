@@ -2,7 +2,7 @@ use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind, Location};
 
 use super::helpers::{get_mark_decorators, get_mark_name};
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::{Diagnostic, Rule};
@@ -61,7 +61,7 @@ fn pytest_mark_parentheses(
             expected_parens: preferred.to_string(),
             actual_parens: actual.to_string(),
         },
-        Range::from_located(decorator),
+        decorator.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(fix);
@@ -109,8 +109,7 @@ fn check_useless_usefixtures(checker: &mut Checker, decorator: &Expr) {
     }
 
     if !has_parameters {
-        let mut diagnostic =
-            Diagnostic::new(UseFixturesWithoutParameters, Range::from_located(decorator));
+        let mut diagnostic = Diagnostic::new(UseFixturesWithoutParameters, decorator.into());
         if checker.patch(diagnostic.kind.rule()) {
             let at_start = Location::new(decorator.location.row(), decorator.location.column() - 1);
             diagnostic.amend(Fix::deletion(at_start, decorator.end_location.unwrap()));

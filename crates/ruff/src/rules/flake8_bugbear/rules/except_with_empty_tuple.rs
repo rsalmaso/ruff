@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::Excepthandler;
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -28,9 +27,8 @@ pub fn except_with_empty_tuple(checker: &mut Checker, excepthandler: &Excepthand
         return;
     };
     if elts.is_empty() {
-        checker.diagnostics.push(Diagnostic::new(
-            ExceptWithEmptyTuple,
-            Range::from_located(excepthandler),
-        ));
+        checker
+            .diagnostics
+            .push(Diagnostic::new(ExceptWithEmptyTuple, excepthandler.into()));
     }
 }

@@ -3,7 +3,6 @@ use ruff_macros::{derive_message_formats, violation};
 use rustc_hash::FxHashMap;
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -67,7 +66,7 @@ pub fn deprecated_unittest_alias(checker: &mut Checker, expr: &Expr) {
             alias: attr.to_string(),
             target: target.to_string(),
         },
-        Range::from_located(expr),
+        expr.into(),
     );
     if checker.patch(diagnostic.kind.rule()) {
         diagnostic.amend(Fix::replacement(

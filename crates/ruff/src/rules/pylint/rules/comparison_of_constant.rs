@@ -6,7 +6,7 @@ use rustpython_parser::ast::{Cmpop, Expr, ExprKind, Located};
 use serde::{Deserialize, Serialize};
 
 use crate::ast::helpers::unparse_constant;
-use crate::ast::types::Range;
+
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -112,7 +112,7 @@ pub fn comparison_of_constant(
                     op: op.into(),
                     right_constant: unparse_constant(right_constant, checker.stylist),
                 },
-                Range::from_located(left),
+                left.into(),
             );
 
             checker.diagnostics.push(diagnostic);

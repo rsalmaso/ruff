@@ -43,18 +43,16 @@ fn check_msg(checker: &mut Checker, msg: &Expr) {
         ExprKind::BinOp { op, .. } => match op {
             Operator::Add => {
                 if checker.settings.rules.enabled(&Rule::LoggingStringConcat) {
-                    checker.diagnostics.push(Diagnostic::new(
-                        LoggingStringConcat,
-                        Range::from_located(msg),
-                    ));
+                    checker
+                        .diagnostics
+                        .push(Diagnostic::new(LoggingStringConcat, msg.into()));
                 }
             }
             Operator::Mod => {
                 if checker.settings.rules.enabled(&Rule::LoggingPercentFormat) {
-                    checker.diagnostics.push(Diagnostic::new(
-                        LoggingPercentFormat,
-                        Range::from_located(msg),
-                    ));
+                    checker
+                        .diagnostics
+                        .push(Diagnostic::new(LoggingPercentFormat, msg.into()));
                 }
             }
             _ => {}
@@ -64,7 +62,7 @@ fn check_msg(checker: &mut Checker, msg: &Expr) {
             if checker.settings.rules.enabled(&Rule::LoggingFString) {
                 checker
                     .diagnostics
-                    .push(Diagnostic::new(LoggingFString, Range::from_located(msg)));
+                    .push(Diagnostic::new(LoggingFString, msg.into()));
             }
         }
         // Check for .format() calls.
@@ -72,10 +70,9 @@ fn check_msg(checker: &mut Checker, msg: &Expr) {
             if checker.settings.rules.enabled(&Rule::LoggingStringFormat) {
                 if let ExprKind::Attribute { value, attr, .. } = &func.node {
                     if attr == "format" && matches!(value.node, ExprKind::Constant { .. }) {
-                        checker.diagnostics.push(Diagnostic::new(
-                            LoggingStringFormat,
-                            Range::from_located(msg),
-                        ));
+                        checker
+                            .diagnostics
+                            .push(Diagnostic::new(LoggingStringFormat, msg.into()));
                     }
                 }
             }
@@ -98,7 +95,7 @@ fn check_log_record_attr_clash(checker: &mut Checker, extra: &Keyword) {
                         if RESERVED_ATTRS.contains(&string.as_str()) {
                             checker.diagnostics.push(Diagnostic::new(
                                 LoggingExtraAttrClash(string.to_string()),
-                                Range::from_located(key),
+                                key.into(),
                             ));
                         }
                     }
@@ -116,7 +113,7 @@ fn check_log_record_attr_clash(checker: &mut Checker, extra: &Keyword) {
                         if RESERVED_ATTRS.contains(&key.as_str()) {
                             checker.diagnostics.push(Diagnostic::new(
                                 LoggingExtraAttrClash(key.to_string()),
-                                Range::from_located(keyword),
+                                keyword.into(),
                             ));
                         }
                     }
@@ -222,7 +219,7 @@ pub fn logging_call(checker: &mut Checker, func: &Expr, args: &[Expr], keywords:
                             {
                                 checker.diagnostics.push(Diagnostic::new(
                                     LoggingRedundantExcInfo,
-                                    Range::from_located(exc_info),
+                                    exc_info.into(),
                                 ));
                             }
                         }

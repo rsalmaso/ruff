@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Constant, Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::{Diagnostic, Rule};
 use crate::violation::Violation;
@@ -163,20 +162,18 @@ pub fn string_in_exception(checker: &mut Checker, exc: &Expr) {
                 } => {
                     if checker.settings.rules.enabled(&Rule::RawStringInException) {
                         if string.len() > checker.settings.flake8_errmsg.max_string_length {
-                            checker.diagnostics.push(Diagnostic::new(
-                                RawStringInException,
-                                Range::from_located(first),
-                            ));
+                            checker
+                                .diagnostics
+                                .push(Diagnostic::new(RawStringInException, first.into()));
                         }
                     }
                 }
                 // Check for f-strings
                 ExprKind::JoinedStr { .. } => {
                     if checker.settings.rules.enabled(&Rule::FStringInException) {
-                        checker.diagnostics.push(Diagnostic::new(
-                            FStringInException,
-                            Range::from_located(first),
-                        ));
+                        checker
+                            .diagnostics
+                            .push(Diagnostic::new(FStringInException, first.into()));
                     }
                 }
                 // Check for .format() calls
@@ -184,10 +181,9 @@ pub fn string_in_exception(checker: &mut Checker, exc: &Expr) {
                     if checker.settings.rules.enabled(&Rule::DotFormatInException) {
                         if let ExprKind::Attribute { value, attr, .. } = &func.node {
                             if attr == "format" && matches!(value.node, ExprKind::Constant { .. }) {
-                                checker.diagnostics.push(Diagnostic::new(
-                                    DotFormatInException,
-                                    Range::from_located(first),
-                                ));
+                                checker
+                                    .diagnostics
+                                    .push(Diagnostic::new(DotFormatInException, first.into()));
                             }
                         }
                     }

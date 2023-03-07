@@ -2,7 +2,6 @@ use ruff_macros::{derive_message_formats, violation};
 use rustc_hash::FxHashMap;
 use rustpython_parser::ast::Stmt;
 
-use crate::ast::types::Range;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -59,7 +58,7 @@ pub fn check_conventional_import(
         if !is_valid_import {
             return Some(Diagnostic::new(
                 UnconventionalImportAlias(name.to_string(), expected_alias.to_string()),
-                Range::from_located(import_from),
+                import_from.into(),
             ));
         }
     }

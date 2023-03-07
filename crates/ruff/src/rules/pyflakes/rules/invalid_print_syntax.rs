@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -27,8 +26,7 @@ pub fn invalid_print_syntax(checker: &mut Checker, left: &Expr) {
     if !checker.ctx.is_builtin("print") {
         return;
     };
-    checker.diagnostics.push(Diagnostic::new(
-        InvalidPrintSyntax,
-        Range::from_located(left),
-    ));
+    checker
+        .diagnostics
+        .push(Diagnostic::new(InvalidPrintSyntax, left.into()));
 }

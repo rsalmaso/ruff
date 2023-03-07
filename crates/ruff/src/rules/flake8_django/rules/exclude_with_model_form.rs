@@ -4,7 +4,7 @@ use ruff_macros::{derive_message_formats, violation};
 
 use crate::rules::flake8_django::rules::helpers::is_model_form;
 use crate::violation::Violation;
-use crate::{checkers::ast::Checker, registry::Diagnostic, Range};
+use crate::{checkers::ast::Checker, registry::Diagnostic};
 
 /// ## What it does
 /// Checks for the use of `exclude` in Django `ModelForm` classes.
@@ -67,10 +67,7 @@ pub fn exclude_with_model_form(
                     continue;
                 };
                 if id == "exclude" {
-                    return Some(Diagnostic::new(
-                        ExcludeWithModelForm,
-                        Range::from_located(target),
-                    ));
+                    return Some(Diagnostic::new(ExcludeWithModelForm, target.into()));
                 }
             }
         }

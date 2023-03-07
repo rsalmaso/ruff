@@ -10,7 +10,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Expr, ExprKind, Keyword};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -41,9 +40,8 @@ pub fn star_arg_unpacking_after_keyword_arg(
         if arg.location <= keyword.location {
             continue;
         }
-        checker.diagnostics.push(Diagnostic::new(
-            StarArgUnpackingAfterKeywordArg,
-            Range::from_located(arg),
-        ));
+        checker
+            .diagnostics
+            .push(Diagnostic::new(StarArgUnpackingAfterKeywordArg, arg.into()));
     }
 }

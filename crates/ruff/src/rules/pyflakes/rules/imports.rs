@@ -4,7 +4,6 @@ use rustpython_parser::ast::Alias;
 use ruff_macros::{derive_message_formats, violation};
 use ruff_python_stdlib::future::ALL_FEATURE_NAMES;
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::{AutofixKind, Availability, Violation};
@@ -138,7 +137,7 @@ pub fn future_feature_not_defined(checker: &mut Checker, alias: &Alias) {
             FutureFeatureNotDefined {
                 name: alias.node.name.to_string(),
             },
-            Range::from_located(alias),
+            alias.into(),
         ));
     }
 }

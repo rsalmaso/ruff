@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::{Arguments, Constant, Expr, ExprKind, Operator};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
@@ -168,10 +167,9 @@ pub fn mutable_argument_default(checker: &mut Checker, arguments: &Arguments) {
                 .as_ref()
                 .map_or(false, |expr| is_immutable_annotation(checker, expr))
         {
-            checker.diagnostics.push(Diagnostic::new(
-                MutableArgumentDefault,
-                Range::from_located(default),
-            ));
+            checker
+                .diagnostics
+                .push(Diagnostic::new(MutableArgumentDefault, default.into()));
         }
     }
 }

@@ -1,7 +1,6 @@
 use ruff_macros::{derive_message_formats, violation};
 use rustpython_parser::ast::Expr;
 
-use crate::ast::types::Range;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 
@@ -32,7 +31,7 @@ pub fn hardcoded_tmp_directory(
             HardcodedTempFile {
                 string: value.to_string(),
             },
-            Range::from_located(expr),
+            expr.into(),
         ))
     } else {
         None

@@ -1,6 +1,5 @@
 use ruff_macros::{derive_message_formats, violation};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::docstrings::definition::{DefinitionKind, Docstring};
 use crate::registry::Diagnostic;
@@ -44,8 +43,7 @@ pub fn capitalized(checker: &mut Checker, docstring: &Docstring) {
     if first_char.is_uppercase() {
         return;
     };
-    checker.diagnostics.push(Diagnostic::new(
-        FirstLineCapitalized,
-        Range::from_located(docstring.expr),
-    ));
+    checker
+        .diagnostics
+        .push(Diagnostic::new(FirstLineCapitalized, docstring.expr.into()));
 }

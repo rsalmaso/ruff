@@ -5,7 +5,6 @@ use rustpython_parser::ast::{Constant, Expr, ExprKind, Keyword};
 use rustpython_parser::{lexer, Mode, Tok};
 use serde::{Deserialize, Serialize};
 
-use crate::ast::types::Range;
 use crate::checkers::ast::Checker;
 use crate::fix::Fix;
 use crate::registry::Diagnostic;
@@ -64,7 +63,7 @@ pub fn native_literals(
                 LiteralType::Str
             } else {
                 LiteralType::Bytes
-            }}, Range::from_located(expr));
+            }}, expr.into());
             if checker.patch(diagnostic.kind.rule()) {
                 diagnostic.amend(Fix::replacement(
                     if id == "bytes" {
@@ -116,7 +115,7 @@ pub fn native_literals(
         // rust-python merges adjacent string/bytes literals into one node, but we can't
         // safely remove the outer call in this situation. We're following pyupgrade
         // here and skip.
-        let arg_code = checker.locator.slice(Range::from_located(arg));
+        let arg_code = checker.locator.slice(arg.into());
         if lexer::lex_located(arg_code, Mode::Module, arg.location)
             .flatten()
             .filter(|(_, tok, _)| matches!(tok, Tok::String { .. }))
@@ -134,7 +133,7 @@ pub fn native_literals(
                     LiteralType::Bytes
                 },
             },
-            Range::from_located(expr),
+            expr.into(),
         );
         if checker.patch(diagnostic.kind.rule()) {
             diagnostic.amend(Fix::replacement(

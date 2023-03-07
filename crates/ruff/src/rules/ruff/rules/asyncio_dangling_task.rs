@@ -1,6 +1,6 @@
 use rustpython_parser::ast::{Expr, ExprKind};
 
-use crate::ast::types::{CallPath, Range};
+use crate::ast::types::CallPath;
 use crate::registry::Diagnostic;
 use crate::violation::Violation;
 use ruff_macros::{derive_message_formats, violation};
@@ -89,13 +89,13 @@ where
                 AsyncioDanglingTask {
                     method: Method::CreateTask,
                 },
-                Range::from_located(expr),
+                expr.into(),
             )),
             Some(["asyncio", "ensure_future"]) => Some(Diagnostic::new(
                 AsyncioDanglingTask {
                     method: Method::EnsureFuture,
                 },
-                Range::from_located(expr),
+                expr.into(),
             )),
             _ => None,
         }
